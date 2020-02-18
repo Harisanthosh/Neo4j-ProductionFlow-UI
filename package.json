@@ -1,0 +1,27 @@
+{
+  "name": "neo4j-productionflow-ui",
+  "version": "1.0.0",
+  "description": "A webinterface based on neovis.js to create and work with neo4j databases",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Harisanthosh/Neo4j-ProductionFlow-UI.git"
+  },
+  "keywords": [
+    "neo4j",
+    "graphdb",
+    "visualization"
+  ],
+  "author": "Hari Santhosh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Harisanthosh/Neo4j-ProductionFlow-UI/issues"
+  },
+  "homepage": "https://github.com/Harisanthosh/Neo4j-ProductionFlow-UI#readme",
+  "dependencies": {
+    "neovis.js": "^1.2.1"
+  }
+}
