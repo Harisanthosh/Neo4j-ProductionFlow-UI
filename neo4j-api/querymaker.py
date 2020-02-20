@@ -17,9 +17,9 @@ def runpg():
         if key == 0:
             cypher_creater += f'CREATE (:{val} {{name: {neo4j_map["Name"][key][key]}}}),'
         elif key == len(label_extr)-1:
-            cypher_creater += f' (:{val})'
+            cypher_creater += f' (:{val} {{name: {neo4j_map["Name"][0][key]}}})'
         else:
-            cypher_creater += f' (:{val}),'
+            cypher_creater += f' (:{val} {{name: {neo4j_map["Name"][0][key]}}}),'
     print(cypher_creater)
 
 if __name__ == "__main__":
