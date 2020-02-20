@@ -1,0 +1,115 @@
+﻿ResourceName;Label
+Segment Gaszähler;A00
+Rohzählerfertigung;A01
+Monti 1;A0101
+Monti 1 - Heliumprüfung;A010101
+OFI1;A010102
+Stutzenbördelanlage;A010103
+Zähler montieren;A010104
+Zähler verschließen;A010105
+Monti 2;A0102
+OFI2;A010201
+Stutzenbördeln;A010202
+Universalumsetzer;A010203
+Ventilmontage;A010204
+Zähler montieren;A010205
+Zähler verschließen;A010206
+Monti 2 - Heliumprüfung;A010207
+Atexprüfung;A010208
+Manuelle Fertigung BK4;A0103
+Heliumprüfung Kammer 8;A010301
+Ofi Manuell;A010302
+Falzherstellung;A0104
+Falzi 2;A010402
+Falzi 3;A010403
+Gewerbegaszähler;A0105
+Gewerbegaszähler OFI;A010501
+Gewerbegaszähler Zähler;A010502
+Platinenfertigung 1;A02
+Gehäusefertigung;A03
+Gehäuse herstellen und beschichten;A0301
+Pressenlinie 1;A030101
+Pressenlinie 2;A030102
+Prüfstelle;A06
+Eichanlage Nr. 181/182;A0601
+Eichstrecke Nr. 181;A060101
+Eichstrecke Nr. 182;A060102
+Transportsystem Stein EI;A060103
+Eichanlage Nr. 171/172;A0602
+Eichstrecke Nr. 171;A060201
+Eichstrecke Nr. 172;A060202
+Pruefstelle - Kamerasystem;A0603
+Eichanlage Nr. 161/162;A0604
+Eichstrecke Nr. 161;A060401
+Eichstrecke Nr. 162;A060402
+Eichanlage Nr. 121/122;A0605
+Eichstrecke Nr. 121;A060501
+Eichstrecke Nr. 122;A060502
+Eichanlage Nr. 91/92;A0606
+Eichstrecke Nr. 91;A060601
+Eichstrecke Nr. 92;A060602
+Messwerksfertigung;A09
+MEFI 3;A0901
+MEFI3-Karree 1;A090101
+Modul 1.01 Mittelblock zuführen;A09010101
+Modul 1.02 Membranhebel;A09010102
+Modul 1.03 Stangen;A09010103
+Modul 1.04 Mittelzapfen;A09010104
+Modul 1.05 Außenschale vorne falzen;A09010105
+Modul 1.06 Außenschalen zuführen;A09010106
+Modul 1.07 Außenschale hinten falzen;A09010107
+Modul 1.08 Messwerk teilkompl. verteilen;A09010108
+MEFI3-Karree 2;A090102
+Modul 2.01 Messwerk teilkompl. zuführen;A09010201
+Modul 2.02 Messwerk dosieren;A09010202
+Modul 2.03 Roste montieren;A09010203
+Modul 2.04/2.05 Schieber Steuerhebel;A09010204
+Modul 2.06 Kurbel;A09010206
+Modul 2.07 Stangenarme;A09010207
+Modul 2.08 Dichtheitsprüfung;A09010208
+Modul 2.09 Schubstangen;A09010209
+Modul 2.11 Funktionsprüfung;A09010211
+Modul 2.12 man. Zeigerverstellung;A09010212
+Mefi3 - Modul 2.14 Messwerk verteilen;A09010214
+MEFI 2;A0902
+MEFI2-Karree 1;A090201
+MEFI2-Karree 2;A090202
+Membranenerstellung;A0903
+MeFI3 - Membranerstellung;A090301
+Modul 1.21 Membran schweißen;A09030101
+Modul 1.22 Wellenmembran schweißen Hand;A09030102
+manuelle TC Montage 1&2;A0904
+TC Montage 1;A090401
+TC Montage 2;A090402
+Gehäusefertigung 2;A11
+EMI Vormontage;A12
+EMI 4.1 Vormontage;A1201
+EMI 4.1 Vormontage Parametrieren 1;A120101
+EMI 4.1 Vormontage Parametrieren 2;A120102
+EMI 4.1 Vormontage Dichtheitsprüfung;A120103
+EMI 4.1 Vormontage Parametrieren 3;A120104
+EMI 4.1 Vormontage Dichtheitsprüfung 2;A120105
+EMI 4.1 Flashen;A1202
+Flashen HAP 4;A120201
+Flashen HAP 5;A120202
+Flashen HAP 6;A120203
+EMI 6.1 Endmontage;A1203
+EMI 6.2 Endmontage;A1204
+EMI Endmontage;A13
+EMI 4.2 Endmontage;A1301
+EMI 4.2 Secure Cell;A130101
+EMI 5.2 Endmontage;A1302
+EMI 5.2 Secure Cell;A130201
+Verpackung;A14
+Bandeinlauf;A1401
+Verpackungsvorbereitung;A1402
+Gaszähler verpacken;A1403
+Verschließen und Abstapeln;A1404
+Abstapelbänder;A1405
+Gaszähler Endmontage;A16
+Manuelle Fertigung BK4;A18
+Heliumprüfung;A1802
+Gaszählerentwicklung;A20
+Systemtest;A2001
+Nacharbeit & Reparatur;A21
+Smart Meter Demontage;A2101
