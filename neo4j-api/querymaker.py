@@ -6,6 +6,7 @@ def runpg():
     neo4j_map = {}
     neo4j_map['Name'] = []
     neo4j_map['Label'] = []
+    wc_leader_arr = []
     # Use .values.tolist() to convert the Pandas Series to python list
     label_extr = file['Label'].values.tolist()
     neo4j_map['Name'].append(file['ResourceName'].values.tolist())
@@ -13,7 +14,11 @@ def runpg():
     # print(neo4j_map)
     cypher_creater = ""
     for key,val in enumerate(label_extr):
-        # print(key,val)
+        if len(val) < 6:
+            wc_leader_arr.append(1)
+        else:
+            wc_leader_arr.append(0)
+
         if key == 0:
             cypher_creater += f'CREATE (:{val} {{name: {neo4j_map["Name"][key][key]}}}),'
         elif key == len(label_extr)-1:
@@ -21,6 +26,8 @@ def runpg():
         else:
             cypher_creater += f' (:{val} {{name: {neo4j_map["Name"][0][key]}}}),'
     print(cypher_creater)
+    file['Leader'] = wc_leader_arr
+    print(file.head())
 
 if __name__ == "__main__":
     runpg()
