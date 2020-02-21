@@ -5,6 +5,7 @@
 var viz;
 
     function draw() {
+        console.log('Drawfunction invoked')
         var config = {
             container_id: "viz",
             server_url: "bolt://localhost:7687",
@@ -29,5 +30,5 @@ var viz;
         viz = new NeoVis.default(config);
         viz.render();
     }
-	
-	draw();
+	setInterval(draw, 3000);
+	// draw();

@@ -6,6 +6,7 @@ from flask import Flask
 from flask import request
 from flask import json
 from flask_cors import CORS
+import querymaker as qr
 
 # Initialize as Flask APP
 app = Flask(__name__,static_url_path='')
@@ -133,9 +134,14 @@ class GraphAlgorithms(object):
 def read_root():
     return {"Hello": "World"}
 
+@app.route("/readwc")
+def read_workcenter():
+    dict_return = qr.runpg()
+    return json.dumps(dict_return)
+
 @app.route("/createnodes/{graph_query}")
 def create_graph(graph_query: str):
-    cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "123graph")
+    cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
     return cx.create_graph(graph_query)
     #return {"item_id": item_id, "q": q}
 
