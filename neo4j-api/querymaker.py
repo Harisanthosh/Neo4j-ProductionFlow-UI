@@ -13,21 +13,26 @@ def runpg():
     neo4j_map['Label'].append(label_extr)
     # print(neo4j_map)
     cypher_creater = ""
+
     for key,val in enumerate(label_extr):
         if len(val) < 6:
             wc_leader_arr.append(1)
         else:
             wc_leader_arr.append(0)
 
-        if key == 0:
-            cypher_creater += f'CREATE (:{val} {{name: {neo4j_map["Name"][key][key]}}}),'
-        elif key == len(label_extr)-1:
-            cypher_creater += f' (:{val} {{name: {neo4j_map["Name"][0][key]}}})'
-        else:
-            cypher_creater += f' (:{val} {{name: {neo4j_map["Name"][0][key]}}}),'
-    print(cypher_creater)
     file['Leader'] = wc_leader_arr
+    neo4j_map['Leader'] = wc_leader_arr
     print(file.head())
+
+    for key,val in enumerate(label_extr):
+        if key == 0:
+            cypher_creater += f'CREATE (:Gaszähler {{name: {val}, processname: {neo4j_map["Name"][key][key]}}}),'
+        elif (key == len(label_extr)-1):
+            cypher_creater += f' (:Gaszähler {{name: {val}, processname: {neo4j_map["Name"][0][key]}}}))'
+        else:
+            cypher_creater += f' (:Gaszähler {{name: {val}, processname: {neo4j_map["Name"][0][key]}}})),'
+
+    print(cypher_creater)
 
 if __name__ == "__main__":
     runpg()
