@@ -68,7 +68,7 @@ $(function () { //shorthand document.ready function
         };
         $.ajax({
             type: "POST",
-            url: "http://127.0.0.1:5000/createnodes/",
+            url: "http://127.0.0.1:8000/createnodes/"+querz,
             data: JSON.stringify(query_builder),
             success: function () { console.log('Created Node successfully') }
         });
