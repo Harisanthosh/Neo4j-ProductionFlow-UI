@@ -1,7 +1,7 @@
 
 <link rel="stylesheet" type="text/css" href="style.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
@@ -19,40 +19,21 @@
       <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 		
-          <form name="contentForm" enctype="multipart/form-data" method="" action="" role="form" data-toggle="validator" novalidate="true">
+          <form name="neo4jForm" method="" role="form" data-toggle="validator" novalidate="true" id="neo4j_form">
           <div class="form schedule-assessment">
             <div class="row margin-top-l">
             <div class="form-group col-md-6">
-              <label for="full_name" class="sr-only">Label Name: </label>
-              <input name="full_name" id="full_name" placeholder="Label Name" type="text" value="" required="required" data-error="Please enter your full name.">
+              <label for="cypher_query" class="sr-only">Enter Cypher Query: </label>
+              <input name="cypher_query" id="cypher_query" placeholder="Enter Cypher Query" type="text" value="" required="required" data-error="Please enter your full name.">
               <div class="help-block with-errors"></div>
             </div><!-- close col-->  
-            <div class="form-group col-md-6">
-              <label for="phone_number" class="sr-only">Property: </label>
-              <input name="phone_number" id="phone_number" placeholder="Unique Id" type="text" value="" required="required" data-error="Please enter your phone number">
+            <!-- <div class="form-group col-md-6">
+              <label for="property" class="sr-only">Property: </label>
+              <input name="property" id="property" placeholder="Unique Id" type="text" value="" required="required" data-error="Please enter your phone number">
               <div class="help-block with-errors"></div>
-            </div><!-- close col-->
+            </div>
+            <!-- close col-->
             </div><!-- close row-->
-
-            <!-- <div class="row">
-            <div class="form-group col-md-6">
-              <label for="email" class="sr-only">Email Address: </label>
-              <input name="email" id="email" placeholder="Email Address" type="email" value="" required="required" data-error="Please enter a valid email.">
-              <div class="help-block with-errors"></div>
-            </div>
-            <div class="form-group col-md-6">
-              <label for="select_options" class="sr-only">What service are your interested in? </label>
-              <select name="select_options" required="required" data-error="Please select one option.">
-              <option value="">What service are you interested in?</option>
-              <option value="Web Design">Web Design</option>
-              <option value="Web Support">Web Support</option>
-              <option value="Digital Marketing">Digital Marketing</option>
-              <option value="CMS Integration">CMS Integration</option>
-              <option value="Other">Other</option>
-              </select>
-              <div class="help-block with-errors"></div>
-            </div>
-            </div> -->
             
             <div class="row">
             </div><!-- close row-->

@@ -1,16 +1,21 @@
+from fastapi import FastAPI, File, Form, UploadFile
+import csv, ast
+import pandas as pd
 import sys
 import datetime
 from neo4j import GraphDatabase
 import nxneo4j
-from flask import Flask
-from flask import request
-from flask import json
-from flask_cors import CORS, cross_origin
-import querymaker as qr
 
-# Initialize as Flask APP
-app = Flask(__name__,static_url_path='')
-CORS(app)
+
+app = FastAPI(title="Graph Algorithms", description="Create and execute graph algorithms in neo4j")
+
+config = {
+    "node_label": "Paper",
+    "relationship_type": None,
+    "identifier_property": "name"
+}
+
+
 class GraphAlgorithms(object):
 
     def __init__(self, uri, user, password):
@@ -28,24 +33,15 @@ class GraphAlgorithms(object):
         with self._driver.session() as session:
             greeting = session.write_transaction(self._create_manager, message)
             print(greeting)
-            returnArrx = []
-            for tx in greeting:
-                returnArrx.append(tx)
-            return json.dumps(returnArrx)
+            return greeting
 
     def get_greetings(self):
         with self._driver.session() as session:
             gnodes = session.write_transaction(self._get_greetings)
-            nodesArr = []
-            # nodesArr['Label'] = []
-            # nodesArr['Properties'] = []
             for item in gnodes:
                 print(f'{item}')
-                nodesArr.append(item[0])
-                # nodesArr['Label'].append(item["n.name"])
-                # nodesArr['Properties'].append(item["n.machineid"])
-            # print(gnodes)
-            return json.dumps(nodesArr)
+            print(gnodes)
+            return gnodes
 
     # def get_closeness_centrality(self):
     #     with self._driver.session() as session:
@@ -132,47 +128,56 @@ class GraphAlgorithms(object):
                      "YIELD nodeId, centrality")
         return rxx
 
+@app.post("/files/")
+async def upload_result(
+    fileb: UploadFile = File(...)
+):
+    return {
+        # "file_size": len(fileb.file.read()),
+        "fileb_content_type": fileb.content_type,
+    }
 
-@app.route("/")
+# @app.delete("/files/{table}")
+# def remove_table(table: str):
+#     return {"Hello": table}
+
+@app.get("/")
 def read_root():
     return {"Hello": "World"}
 
-@app.route("/readwc")
-def read_workcenter():
-    dict_return = qr.runpg()
-    return json.dumps(dict_return)
-
-@app.route("/createnodes", methods=['POST'])
-@cross_origin()
-def create_graph():
+@app.post("/createnodes/{graph_query}")
+def create_graph(graph_query: str):
     cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
-    data = request.data
-    print(data)
-    return cx.create_graph(json.dumps(data['cypher_val']))
+    return cx.create_graph(graph_query)
     #return {"item_id": item_id, "q": q}
 
-@app.route("/getnodes")
+@app.get("/getnodes")
 def get_nodes_from_graph():
     cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
     return cx.get_greetings()
 
 
-@app.route("/getcentrality")
+@app.get("/getcentrality")
 def get_closeness_centrality_of_graph():
     cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
     return cx.get_closeness_centrality()
 
-@app.route("/getrank")
+@app.get("/getrank")
 def get_rank_of_graph():
     cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
     return cx.get_page_rank()
 
-@app.route("/betweennesscentrality")
+@app.get("/betweennesscentrality")
 def get_betweeness_centrality_of_graph():
     cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
     return cx.get_betweenness_centrality()
 
-@app.route("/harmoniccentrality")
+@app.get("/harmoniccentrality")
 def get_harmonic_centrality_of_graph():
     cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
     return cx.get_harmonic_centrality()
+
+@app.get("/shortestpath")
+def get_shortest_path_between_two_nodes(p1: str,p2: str):
+    cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
+    return cx.get_shortest_path(p1,p2)
