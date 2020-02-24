@@ -56,6 +56,31 @@ function customdraw() {
 }
 // setInterval(customdraw, 5000);
 customdraw();
+function customrenderer(querz) {
+    var labelname = querz.split(':')[1].split('{')[0].trim();
+    console.log(labelname);
+    var config = {
+        container_id: "viz",
+        server_url: "bolt://localhost:7687",
+        server_user: "neo4j",
+        server_password: "honeywell123!",
+        labels: {
+            labelname: {
+                "caption": "name"
+            }
+        },
+        relationships: {
+            "LINKED_WITH": {
+                "thickness": "weight",
+                "caption": false
+            }
+        },
+        initial_cypher: "MATCH (n)-[r:LINKED_WITH]->(m) RETURN *"
+    };
+
+    viz = new NeoVis.default(config);
+    viz.render();
+}
 
 $(function () { //shorthand document.ready function
     $('#neo4j_form').on('submit', function (e) { //use on if jQuery 1.7+
@@ -68,10 +93,10 @@ $(function () { //shorthand document.ready function
         };
         $.ajax({
             type: "POST",
-            url: "http://127.0.0.1:8000/createnodes/"+querz,
+            url: "http://127.0.0.1:8000/createnodes/" + querz,
             data: JSON.stringify(query_builder),
-            success: function () { console.log('Created Node successfully') },
-            error: function() { console.error('Network connection to Neo4j failed!')}
+            success: function () { console.log('Created Node successfully'); customrenderer(querz); },
+            error: function () { console.error('Network connection to Neo4j failed!') }
         });
     });
 });
