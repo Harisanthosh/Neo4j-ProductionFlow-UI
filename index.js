@@ -70,7 +70,8 @@ $(function () { //shorthand document.ready function
             type: "POST",
             url: "http://127.0.0.1:8000/createnodes/"+querz,
             data: JSON.stringify(query_builder),
-            success: function () { console.log('Created Node successfully') }
+            success: function () { console.log('Created Node successfully') },
+            error: function() { console.error('Network connection to Neo4j failed!')}
         });
     });
 });

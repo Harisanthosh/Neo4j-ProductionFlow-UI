@@ -1,13 +1,25 @@
 from fastapi import FastAPI, File, Form, UploadFile
-import csv, ast
+from starlette.middleware.cors import CORSMiddleware
 import pandas as pd
 import sys
 import datetime
+import json
 from neo4j import GraphDatabase
 import nxneo4j
 
-
+origins = [
+    "http://localhost",
+    "http://localhost:8887",
+]
 app = FastAPI(title="Graph Algorithms", description="Create and execute graph algorithms in neo4j")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 config = {
     "node_label": "Paper",
@@ -33,7 +45,10 @@ class GraphAlgorithms(object):
         with self._driver.session() as session:
             greeting = session.write_transaction(self._create_manager, message)
             print(greeting)
-            return greeting
+            nodesArr = []
+            for item in greeting:
+                nodesArr.append(item[0])
+            return json.dumps(nodesArr)
 
     def get_greetings(self):
         with self._driver.session() as session:
