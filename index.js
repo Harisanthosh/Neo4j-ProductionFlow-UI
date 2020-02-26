@@ -82,6 +82,22 @@ function customrenderer(querz) {
     viz.render();
 }
 
+// var mqtt;
+// var reconnectTimeout = 2000;
+// var host = "localhost";
+// var port = 1883;
+// function MQTTconnect() {
+//     mqtt = new Paho.MQTT.Client(host, port, 'clientjs');
+//     var options = {
+//         timeout: 3,
+//         onSuccess: () => { console.log('Connection established!'); },
+//         onFailure: () => { console.log('Connection failed') },
+//     };
+//     mqtt.onMessageArrived = () => { console.log('Message Arrived!'); }
+//     mqtt.connect(options);
+// }
+
+// MQTTconnect();
 $(function () { //shorthand document.ready function
     $('#neo4j_form').on('submit', function (e) { //use on if jQuery 1.7+
         e.preventDefault();  //prevent form from submitting
@@ -99,4 +115,55 @@ $(function () { //shorthand document.ready function
             error: function () { console.error('Network connection to Neo4j failed!') }
         });
     });
+    var myVar = '';
+    $('#startSim').on('click', (e) => {
+        myVar = setInterval(customdraw, 3000);
+    });
+
+    $('#stopSim').on('click', (e) => {
+        clearInterval(myVar);
+    });
+
+    // var socket = io('http://localhost');
+    // socket.on('connect', function () { });
+    // socket.on('event', function (data) { console.log(data);});
+    // socket.on('disconnect', function () { });
+    // socket.on('simpy', function (data) {
+    //     console.log(data);
+    //     socket.emit('my other event', { my: 'data' });
+    // });
+
 });
+
+
+// var client = new Paho.MQTT.Client("broker.hivemq.com", Number(8000), "clientId");
+
+//     var options = {
+
+//         //connection attempt timeout in seconds
+//         timeout: 3,
+
+//         //Gets Called if the connection has successfully been established
+//         onSuccess: function () {
+//             alert("Connected");
+//         },
+
+//         //Gets Called if the connection could not be established
+//         onFailure: function (message) {
+//             alert("Connection failed: " + message.errorMessage);
+//         }
+
+//     };
+
+//     //Attempt to connect
+//     client.connect(options);
+
+//     client.subscribe("simpy/test", {qos: 2});
+
+//     // var client = mqtt.connect('wss://broker.hivemq.com');
+//     // client.subscribe("simpy/test");
+
+//     client.on("message", function (topic, payload) {
+//         alert([topic, payload].join(": "));
+//         // client.end();
+//     })

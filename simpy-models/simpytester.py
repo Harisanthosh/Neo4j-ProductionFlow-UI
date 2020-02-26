@@ -1,4 +1,5 @@
 import simpy
+import paho.mqtt.publish as publish
 
 def clock(env, name, tick):
     while True:
@@ -16,11 +17,16 @@ env = simpy.RealtimeEnvironment()
 def speaker(env, speaker):
     yield env.timeout(3)
     return f'Speaker {speaker} finishes his speech'
+    publish.single("simpy/test", payload=f'Speaker {speaker} finishes his speech', hostname="localhost",port=1883)
 
 def moderator(env):
     for i in range(3):
         val = yield env.process(speaker(env, i+1))
         print(val)
+
+    #     publish.single('simpy/test', payload=None, qos=0, retain=False, hostname="localhost",
+    # port=1883, client_id="", keepalive=60, will=None, auth=None, tls=None,
+    # protocol=mqtt.MQTTv311, transport="tcp")
 
 env.process(moderator(env))
 env.run()
