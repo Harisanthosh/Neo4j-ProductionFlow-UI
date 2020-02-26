@@ -5,9 +5,9 @@ def clock(env, name, tick):
         print(name, env.now)
         yield env.timeout(tick)
 
-# Process as fast as possible, in this example two events are running in the interval of 1500 and 2000 ms till 5000 ms
-env = simpy.Environment()
+# Process as fast as possible, in this example two events are running in the interval of 1 and 2 s till 5 seconds
+env = simpy.RealtimeEnvironment()
 
-env.process(clock(env, 'fast', 1500))
-env.process(clock(env, 'slow', 2000))
-env.run(until=5000)
+env.process(clock(env, 'fast', 1))
+env.process(clock(env, 'slow', 2))
+env.run(until=5)
