@@ -1,5 +1,7 @@
 import simpy
 import paho.mqtt.publish as publish
+import time
+from datetime import datetime
 
 def clock(env, name, tick):
     while True:
@@ -16,7 +18,7 @@ env = simpy.RealtimeEnvironment()
 
 def speaker(env, speaker):
     yield env.timeout(3)
-    return f'Speaker {speaker} finishes his speech'
+    return f'Speaker {speaker} finishes his speech at {env.now} interval on time {datetime.now()}'
     publish.single("simpy/test", payload=f'Speaker {speaker} finishes his speech', hostname="localhost",port=1883)
 
 def moderator(env):
