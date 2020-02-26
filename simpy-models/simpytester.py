@@ -12,6 +12,7 @@ env = simpy.RealtimeEnvironment()
 # env.run(until=5)
 
 # Creating processes from events, here three speakers take turn and speak infront of an audience
+
 def speaker(env, speaker):
     yield env.timeout(3)
     return f'Speaker {speaker} finishes his speech'
@@ -24,6 +25,26 @@ def moderator(env):
 env.process(moderator(env))
 env.run()
 
+# Asynchronous and conditional process
+"""
+def speaker(env, speaker):
+    try:
+        yield env.timeout(speaker)
+        return f'Speaker {speaker} finishes his speech'
+    except simpy.Interrupt as interrupt:
+        print(interrupt.cause)
 
+def moderator(env):
+    for i in range(5):
+        speaker_proc = env.process(speaker(env, i+1))
+        results = yield speaker_proc | env.timeout(2)
+        if speaker_proc not in results:
+            speaker_proc.interrupt('No time left')
+        else:
+            print(results)
+
+env.process(moderator(env))
+env.run()
+"""
 
 
