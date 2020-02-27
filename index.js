@@ -101,6 +101,15 @@ $(function () { //shorthand document.ready function
         myVar = setInterval(function () {
             // viz = NeoVis.reload();
             viz.reload();
+            $.ajax({
+                async: false,
+                url: 'http://localhost:8887/simpy-models/testfile.txt',
+                dataType: 'text',
+                success: function (data) {
+                    $('#myLogFile').empty();
+                    $('#myLogFile').append(data);
+                }
+            });
         }, 3000);
     });
 
