@@ -103,11 +103,55 @@ $(function () { //shorthand document.ready function
             viz.reload();
             $.ajax({
                 async: false,
-                url: 'http://localhost:8887/simpy-models/testfile.txt',
+                url: 'http://localhost:8887/simpy-models/processmining_template.csv',
                 dataType: 'text',
                 success: function (data) {
                     $('#myLogFile').empty();
-                    $('#myLogFile').append(data);
+                    // $('#myLogFile').append(data);
+                    var psv = d3.dsvFormat(";");
+                    var parsedCSV = psv.parse(data);
+                    console.log(parsedCSV);
+                    var table = d3.select("#myLogFile").append('table')
+                    var thead = table.append('thead')
+                    var tbody = table.append('tbody')
+
+                    thead.append('tr')
+                        .selectAll('th')
+                        .data(parsedCSV.columns)
+                        .enter()
+                        .append('th')
+                        .text(function (d) { return d })
+
+                    var rows = tbody.selectAll('tr')
+                        .data(parsedCSV)
+                        .enter()
+                        .append('tr')
+
+                    var cells = rows.selectAll('td')
+                        .data(function (row) {
+                            return parsedCSV.columns.map(function (column) {
+                                return { column: column, value: row[column] }
+                            })
+                        })
+                        .enter()
+                        .append('td')
+                        .text(function (d) { return d.value })
+
+                    // var container = d3.select("#myLogFile")
+                    //     .append("table")
+
+                    //     .selectAll("tr")
+                    //     .data(parsedCSV).enter()
+                    //     .append("tr")
+
+                    //     .selectAll("td")
+                    //     .data(function (d) { 
+                    //         console.log(d);
+                    //         return d; 
+                    //     }).enter()
+                    //     .append("td")
+                    //     .text(function (d) { return d.value; });
+
                 }
             });
         }, 3000);

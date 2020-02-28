@@ -41,6 +41,16 @@ input[type="text"], input[type="email"] {
         border: 1px solid lightgray;
         font: 10pt arial;
 }
+table {
+    border-collapse: collapse;
+    border: 2px black solid;
+    font: 12px sans-serif;
+}
+
+td {
+    border: 1px black solid;
+    padding: 5px;
+}
 .h1, h1 {
     font-size: 36px;
 }
