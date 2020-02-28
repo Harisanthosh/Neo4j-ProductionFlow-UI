@@ -2,10 +2,11 @@ from fastapi import FastAPI, File, Form, UploadFile
 from starlette.middleware.cors import CORSMiddleware
 import pandas as pd
 import sys
-import datetime
 import json
 from neo4j import GraphDatabase
 import nxneo4j
+sys.path.insert(1, 'C:/Users/H395978/PycharmProjects/Neo4j-ProductionFlow-UI/simpy-models')
+import PMFormatter as pm
 
 origins = [
     "http://localhost",
@@ -159,6 +160,11 @@ async def upload_result(
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
+@app.get("/startsimulator/{start_time}/{end_time}")
+def start_simulator(start_time: str, end_time: str):
+    pm.invoker_api(start_time,end_time)
+    return {"Simulator Started!"}
 
 @app.post("/createnodes/{graph_query}")
 def create_graph(graph_query: str):
