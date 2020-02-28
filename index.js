@@ -136,22 +136,6 @@ $(function () { //shorthand document.ready function
                         .enter()
                         .append('td')
                         .text(function (d) { return d.value })
-
-                    // var container = d3.select("#myLogFile")
-                    //     .append("table")
-
-                    //     .selectAll("tr")
-                    //     .data(parsedCSV).enter()
-                    //     .append("tr")
-
-                    //     .selectAll("td")
-                    //     .data(function (d) { 
-                    //         console.log(d);
-                    //         return d; 
-                    //     }).enter()
-                    //     .append("td")
-                    //     .text(function (d) { return d.value; });
-
                 }
             });
         }, 3000);
@@ -160,4 +144,11 @@ $(function () { //shorthand document.ready function
     $('#stopSim').on('click', (e) => {
         clearInterval(myVar);
     });
+    $('#searchNode').on('click', (e) => {
+        var nodeName = $('#labelnameg').val();
+        var statement = `MATCH (n:${nodeName})-[r:MOVES_ITEM]->(m:${nodeName}) RETURN *`;
+        viz.renderWithCypher(statement);
+        console.log('Searched query is '+ nodeName);
+    });
+
 });

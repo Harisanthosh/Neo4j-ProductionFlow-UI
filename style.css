@@ -16,13 +16,6 @@ select {
     color: #010100;
     padding-left: 3rem;
 }
-input[type="text"], input[type="email"] {
-    font-size: 1.6rem;
-    color: #010100;
-    width: 200%;
-    line-height: 65px;
-    padding-left: 3rem;
-}
 .btn-secondary {
     color: #fff;
     background-color: #6c757d;
