@@ -4,6 +4,7 @@ import sys
 def runpg():
     file = pd.read_csv('processmining_template.csv',sep=';')
     print(file.head())
+    print(file.columns)
     neo4j_map = {}
     cypher_queries = {}
     neo4j_map['Name'] = []
@@ -12,10 +13,12 @@ def runpg():
     cypher_queries['Match'] = []
     """
     Actual Cypher Query
-    LOAD CSV WITH HEADERS FROM 'http://localhost:8887/simpy-models/processing_template.csv' AS line
-    CREATE (:Speaker { name: line.caseId})W
+    file:///C:/Users/H395978/PycharmProjects/Neo4j-ProductionFlow-UI/simpy-models/processing_template.csv
+    LOAD CSV WITH HEADERS FROM 'http://localhost:8887/simpy-models/processmining_template.csv' AS line FIELDTERMINATOR ';'
+    CREATE (:Speaker { name: line.caseId})
     """
-    cypher_queries['Create'].append('http://localhost:8887/simpy-models/processing_template.csv')
+    cypher_queries['Create'].append("LOAD CSV WITH HEADERS FROM 'http://localhost:8887/simpy-models/processmining_template.csv' AS line FIELDTERMINATOR ';' CREATE (:Speaker { name: line.caseId})")
+    print(cypher_queries)
     return cypher_queries
 
 
