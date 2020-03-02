@@ -16,8 +16,13 @@ def runpg():
     file:///C:/Users/H395978/PycharmProjects/Neo4j-ProductionFlow-UI/simpy-models/processing_template.csv
     LOAD CSV WITH HEADERS FROM 'http://localhost:8887/simpy-models/processmining_template.csv' AS line FIELDTERMINATOR ';'
     CREATE (:Speaker { name: line.caseId})
+    
+    LOAD CSV WITH HEADERS FROM "http://localhost:8887/simpy-models/processmining_template.csv" AS line FIELDTERMINATOR ';' 
+    MATCH(s:Speaker{name:line.caseId}),(s1:Stage) CALL apoc.create.relationship(s, line.Activity,{time:line.Timestamp}, s1) YIELD rel
+    REMOVE rel.noOp
     """
-    cypher_queries['Create'].append("LOAD CSV WITH HEADERS FROM 'http://localhost:8887/simpy-models/processmining_template.csv' AS line FIELDTERMINATOR ';' CREATE (:Speaker { name: line.caseId})")
+    cypher_queries['Create'].append("CREATE CONSTRAINT ON (n:Speaker) ASSERT n.name IS UNIQUE\n LOAD CSV WITH HEADERS FROM 'http://localhost:8887/simpy-models/processmining_template.csv' AS line FIELDTERMINATOR ';' MERGE (s:Speaker{name:line.caseId}) RETURN count(s)")
+    cypher_queries['Match'].append("LOAD CSV WITH HEADERS FROM 'http://localhost:8887/simpy-models/processmining_template.csv' AS line FIELDTERMINATOR ';' MATCH(s:Speaker{name:line.caseId}),(s1:Stage) CALL apoc.create.relationship(s, line.Activity,{time:line.Timestamp}, s1) YIELD rel REMOVE rel.noOp")
     print(cypher_queries)
     return cypher_queries
 
