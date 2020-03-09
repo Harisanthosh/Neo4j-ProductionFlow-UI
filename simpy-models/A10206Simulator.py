@@ -3,6 +3,8 @@ from datetime import datetime
 import time
 import pandas as pd
 import sys
+import random
+import string
 
 global cols_list
 global resource_list
@@ -10,11 +12,20 @@ global wc_list
 global processing_time
 global waiting_time
 
+#chars=string.ascii_uppercase + string.digits
+def sfc_generator(size=10, chars=string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+
 def startSimulator(df2):
     print(df2.head())
     #Using iloc to access can also use iat or at to access elements as matrix
-    sfc_sim = df2.iloc[0]['SFC']
-    print(sfc_sim)
+    sfc_sim = str(df2.iloc[0]['SFC'])[:6]
+    sfc_act = int(sfc_sim)
+    sfc_gen = int(sfc_generator())
+    print(sfc_act)
+    print(sfc_gen)
+    merged_sfc = str(sfc_act) + str(sfc_gen)
+    print(merged_sfc)
 
 
 
