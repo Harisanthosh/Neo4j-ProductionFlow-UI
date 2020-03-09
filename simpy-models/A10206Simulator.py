@@ -2,7 +2,6 @@ import simpy
 from datetime import datetime
 import time
 import pandas as pd
-import sys
 import random
 import string
 
@@ -17,7 +16,7 @@ global waiting_time
 def sfc_generator(size=10, chars=string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
-def startSimulator(df2):
+def startSimulator(env,df2):
     #Using iloc to access can also use iat or at to access elements as matrix
     sfc_sim = str(df2.iloc[0]['SFC'])[:6]
     sfc_act = int(sfc_sim)
@@ -32,10 +31,15 @@ def startSimulator(df2):
     for index,row in df2.iterrows():
         #print(index, row['OPERATION'],row['PROCESSING_TIME_SECS'],row['WAITING_TIME_SECS'])
         row['SFC'] = merged_sfc
+        #row['DATE_TIME'] = f"{datetime.now():%d-%m-%Y %H:%M:%S}"
+        row['DATE_TIME'] = f"{datetime.fromtimestamp(env.now):%d-%m-%Y %H:%M:%S}"
         curr_row = pd.DataFrame([row],columns=cols_list)
-        # print(curr_row)
+        pt_time = int(row['PROCESSING_TIME_SECS'])
+        print(pt_time)
+        yield env.timeout(pt_time)
         new_df = new_df.append([curr_row],ignore_index=True)
-    print(new_df.head())
+
+    print(new_df)
 
 
 
@@ -58,7 +62,9 @@ if __name__ == "__main__":
     print(cols_list)
     print(len(cols_list))
     #for key,val in df1.iterrows():
-
-    startSimulator(df1)
+    env = simpy.Environment(initial_time=time.time())
+    env.process(startSimulator(env,df1))
+    #startSimulator(df1,env)
+    env.run()
     #print(resource_list)
     #print(wc_list)
