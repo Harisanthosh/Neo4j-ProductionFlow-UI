@@ -4,6 +4,10 @@ import time
 import pandas as pd
 import random
 import string
+from pm4py.objects.log.adapters.pandas import csv_import_adapter
+from pm4py.objects.conversion.log import factory as conversion_factory
+from pm4py.algo.discovery.alpha import factory as alpha_miner
+from pm4py.visualization.petrinet import factory as vis_factory
 
 global cols_list
 global resource_list
@@ -27,22 +31,32 @@ def startSimulator(env,df2,tns):
     print(f'Starting simulation for the SFC {merged_sfc}')
     #print(f'Processed at the resources {resource_list}')
     df_construct = {}
-    new_df = pd.DataFrame(columns=cols_list)
+    new_df = pd.DataFrame()
     #print(new_df)
     for index,row in df2.iterrows():
         #print(index, row['OPERATION'],row['PROCESSING_TIME_SECS'],row['WAITING_TIME_SECS'])
         if index+1 > tns:
             break
         row['SFC'] = merged_sfc
+        row['case:concept:name'] = row['WORK_CENTER']
+        row['concept:name'] = row['OPERATION']
+        row['org:resource'] = row['RESRCE']
         #row['DATE_TIME'] = f"{datetime.now():%d-%m-%Y %H:%M:%S}"
         row['DATE_TIME'] = f"{datetime.fromtimestamp(env.now):%d-%m-%Y %H:%M:%S}"
-        curr_row = pd.DataFrame([row],columns=cols_list)
+        row['time:timestamp'] = row['DATE_TIME']
+        curr_row = pd.DataFrame([row])
         pt_time = int(row['PROCESSING_TIME_SECS'])
         print(pt_time)
         yield env.timeout(pt_time)
         new_df = new_df.append([curr_row],ignore_index=True)
 
-    print(new_df)
+    #print(new_df)
+    # Implementation of Petrin nets representation will be added
+    log = conversion_factory.apply(new_df)
+    print(log)
+    net, initial_marking, final_marking = alpha_miner.apply(log)
+    #gviz = vis_factory.apply(net, initial_marking, final_marking)
+    #vis_factory.view(gviz)
 
 
 
@@ -66,7 +80,7 @@ if __name__ == "__main__":
     print(len(cols_list))
     #for key,val in df1.iterrows():
     env = simpy.Environment(initial_time=time.time())
-    total_no_of_steps = 24
+    total_no_of_steps = 70
     env.process(startSimulator(env,df1,total_no_of_steps))
     #startSimulator(df1,env)
     env.run()
