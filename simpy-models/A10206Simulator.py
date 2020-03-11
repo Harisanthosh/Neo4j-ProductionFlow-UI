@@ -16,7 +16,7 @@ global waiting_time
 def sfc_generator(size=10, chars=string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
-def startSimulator(env,df2):
+def startSimulator(env,df2,tns):
     #Using iloc to access can also use iat or at to access elements as matrix
     sfc_sim = str(df2.iloc[0]['SFC'])[:6]
     sfc_act = int(sfc_sim)
@@ -25,11 +25,14 @@ def startSimulator(env,df2):
     print(sfc_gen)
     merged_sfc = str(sfc_act) + str(sfc_gen)
     print(f'Starting simulation for the SFC {merged_sfc}')
+    #print(f'Processed at the resources {resource_list}')
     df_construct = {}
     new_df = pd.DataFrame(columns=cols_list)
     #print(new_df)
     for index,row in df2.iterrows():
         #print(index, row['OPERATION'],row['PROCESSING_TIME_SECS'],row['WAITING_TIME_SECS'])
+        if index+1 > tns:
+            break
         row['SFC'] = merged_sfc
         #row['DATE_TIME'] = f"{datetime.now():%d-%m-%Y %H:%M:%S}"
         row['DATE_TIME'] = f"{datetime.fromtimestamp(env.now):%d-%m-%Y %H:%M:%S}"
@@ -63,7 +66,8 @@ if __name__ == "__main__":
     print(len(cols_list))
     #for key,val in df1.iterrows():
     env = simpy.Environment(initial_time=time.time())
-    env.process(startSimulator(env,df1))
+    total_no_of_steps = 24
+    env.process(startSimulator(env,df1,total_no_of_steps))
     #startSimulator(df1,env)
     env.run()
     #print(resource_list)
