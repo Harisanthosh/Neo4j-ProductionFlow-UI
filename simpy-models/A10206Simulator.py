@@ -55,8 +55,8 @@ def startSimulator(env,df2,tns):
     log = conversion_factory.apply(new_df)
     print(log)
     net, initial_marking, final_marking = alpha_miner.apply(log)
-    #gviz = vis_factory.apply(net, initial_marking, final_marking)
-    #vis_factory.view(gviz)
+    gviz = vis_factory.apply(net, initial_marking, final_marking)
+    vis_factory.view(gviz)
 
 
 
