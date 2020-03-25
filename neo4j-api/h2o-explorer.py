@@ -1,5 +1,6 @@
 import h2o
 import pandas as pd
+from datetime import datetime, timedelta
 
 model_path = 'C:/Users/H395978/AppData/Local/Programs/Thesis/stamm/ml_models/h20_regression_trees'
 #saved_model = h2o.load_model(model_path)
@@ -13,7 +14,13 @@ hf = h2o.H2OFrame(df)
 mojo_model = h2o.import_mojo(model_path)
 #print(mojo_model)
 predict = mojo_model.predict(hf)
+orig_time = f"{datetime.now():%d-%m-%Y %H:%M:%S}"
 print(predict)
+predicted_val = datetime.now() + timedelta(seconds=int(predict))
+predicted_time = f"{predicted_val:%d-%m-%Y %H:%M:%S}"
+print(orig_time)
+print('The estimated time of completion for the SFC is')
+print(predicted_time)
 #mojo_model.varimp_plot()
 #h2o.print_mojo(model_path, format='json', tree_index=None)
 
