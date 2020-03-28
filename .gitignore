@@ -1,5 +1,6 @@
 node_modules/
 venv/
+venv1/
 sfc_variants/
 __pycache__/
 .idea/
