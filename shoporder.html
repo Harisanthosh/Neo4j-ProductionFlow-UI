@@ -1,0 +1,56 @@
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- <script src="https://unpkg.com/mqtt@3.0.0/dist/mqtt.min.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script src="node_modules/neovis.js/dist/neovis.js"></script>
+<script type="module" src="shoporderforecast.js"></script>
+<section class="footer-form padding-top-xl padding-bottom-xl" aria-label="Contact Form">
+  <div class="wrapper">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 section5 text-center">
+          <h2 class="h1 font-w400">Shop order Forecast</h2>
+          <p class="margin-top-m margin-bottom-m">API testing interface by Honeywell's Production Intelligence team!</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+          <form name="neo4jForm" method="" role="form" data-toggle="validator" novalidate="true" id="neo4j_form">
+            <div class="form schedule-assessment">
+              <div class="row margin-top-l">
+                <div class="form-group col-md-6">
+                  <label for="cypher_query" class="sr-only">Enter the number of SFC's: </label>
+                  <input name="cypher_query" id="cypher_query" placeholder="Enter the number of SFC's" type="text" value=""
+                    required="required" data-error="Please enter your full name.">
+                  <div class="help-block with-errors"></div>
+                </div><!-- close col-->
+                <!-- <div class="form-group col-md-6">
+              <label for="property" class="sr-only">Property: </label>
+              <input name="property" id="property" placeholder="Unique Id" type="text" value="" required="required" data-error="Please enter your phone number">
+              <div class="help-block with-errors"></div>
+            </div>
+            <!-- close col-->
+              </div><!-- close row-->
+
+              <div class="row">
+              </div><!-- close row-->
+              <div class="form-group text-center">
+                <input class="submit center-block btn btn-primary" value="Submit" type="submit">
+              </div>
+            </div>
+
+        </div>
+      </div>
+      <div id="myLogFile"></div>      
+    </div>
+  </div>
+</section>
