@@ -1,56 +1,112 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
   integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" type="text/css" rel="stylesheet" media="screen" /> -->
+<link href="timingfield.css" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<!-- <script src="https://unpkg.com/mqtt@3.0.0/dist/mqtt.min.js"></script> -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script> -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
   integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
   integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 <script src="node_modules/neovis.js/dist/neovis.js"></script>
+<script src="node_modules/svidget/dist/svidget.js"></script>
 <script type="module" src="shoporderforecast.js"></script>
-<section class="footer-form padding-top-xl padding-bottom-xl" aria-label="Contact Form">
-  <div class="wrapper">
-    <div class="container">
-      <div class="row">
+<script type="module" src="timingfield.js"></script>
+<!-- <script type="module" src="snap.svg-min.js"></script>
+<script type="module" src="svidget.min.js"></script> -->
+  <div class="wrapper" style="background-color: beige;">
+    <div class="container">	
+      <div class="row1">
+	  <img src="honeywelllogo.png" alt="Honeywell" style="width: 50%;/* height: auto; */margin-left: auto;margin-right: auto;text-align: center;vertical-align: middle;display: table-cell;">
         <div class="col-xs-12 section5 text-center">
           <h2 class="h1 font-w400">Shop order Forecast</h2>
-          <p class="margin-top-m margin-bottom-m">API testing interface by Honeywell's Production Intelligence team!</p>
+          <p class="margin-top-m margin-bottom-m">Monty White Meter Assembly forecasting</p>
         </div>
       </div>
-      <div class="row">
+      <div class="row1" style="text-align: center;margin-left: 15vw;">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
           <form name="neo4jForm" method="" role="form" data-toggle="validator" novalidate="true" id="neo4j_form">
-            <div class="form schedule-assessment">
-              <div class="row margin-top-l">
-                <div class="form-group col-md-6">
-                  <label for="cypher_query" class="sr-only">Enter the number of SFC's: </label>
+              
+                <label for="cypher_query" class="sr-only">Enter the number of SFC's: </label>
                   <input name="cypher_query" id="cypher_query" placeholder="Enter the number of SFC's" type="text" value=""
                     required="required" data-error="Please enter your full name.">
-                  <div class="help-block with-errors"></div>
-                </div><!-- close col-->
-                <!-- <div class="form-group col-md-6">
-              <label for="property" class="sr-only">Property: </label>
-              <input name="property" id="property" placeholder="Unique Id" type="text" value="" required="required" data-error="Please enter your phone number">
-              <div class="help-block with-errors"></div>
-            </div>
-            <!-- close col-->
-              </div><!-- close row-->
+				  <label for="size_sfc" class="sr-only">Enter the size of White Meter Casing </label>
+                  <input name="size_sfc" id="size_sfc" placeholder="Enter the size of White Meter Casing" type="text" value=""
+                    required="required" data-error="Please enter your full name.">
+				  <input type="radio" id="yesval" name="valve" value="VE">
+					<label for="yesval">With Valve</label><br>
+				  <input type="radio" id="noval" name="valve" value="noval" checked>
+					<label for="noval">Without Valve</label><br>
 
               <div class="row">
               </div><!-- close row-->
               <div class="form-group text-center">
+			    <button id="startSim" class="submit center-block btn btn-primary" type="button" >Start Simulator</button><!-- Disable button latere-->
                 <input class="submit center-block btn btn-primary" value="Submit" type="submit">
-              </div>
-            </div>
-
+			    <button id="resetSim" class="submit center-block btn btn-primary" type="button" disabled>Reset Simulation</button> 
+              </div>	
+			  <div id="dialog" title="Simulator Config">Monty2 Simulator Configuration Screen
+				<label for="cypher_query" class="sr-only">Enter the number of SFC's: </label>
+                  <input name="cypher_query" id="sfcs_no" placeholder="Number of SFC's to simulate" type="text" value=""
+                    required="required" data-error="Please enter no of SFC's">
+				<fieldset>
+					<legend>Simulate Bottleneck </legend>
+					<label for="checkbox-1">Yes</label>
+					<input type="radio" name="checkbox-1" id="checkbox-1" value="Yes">
+					<label for="checkbox-2">No</label>
+					<input type="radio" name="checkbox-1" id="checkbox-2" value="No" checked>
+				 </fieldset>
+				<div id='oper_bw'>
+				<label for="oper_choice">Select an Operation to cause bottleneck</label>
+				<select name="oper_choice" id="oper_choice">
+				  <option value="A011600">A011600 Stutzen befetten </option>
+				  <option value="A011800">A011800 Aussenmagnet montieren </option>
+				  <option value="A011900" selected="selected">A011900 Messwerk einsetzen </option>
+				  <option value="A012000">A012000 Oberteil dosieren </option>
+				  <option value="A012200">A012200 Unterteil aufsetzen </option>
+				  <option value="A012300">A012300 Falz auflegen </option>
+				  <option value="A012500">A012500 Zähler vorbördeln </option>
+				  <option value="A012600">A012600 Zähler fertigbördeln </option>
+				  <option value="A012800">A012800 Zähler dichtheitsprüfen </option>
+				  <option value="A013500">A013500 Zähler abstapeln </option>
+				</select>
+				</div>
+				<div id="timedurationval" class="timing"></div>
+				<!-- <input type="text" id="timedurationval" class="timing"> -->
+				<label for="cypher_query" class="sr-only">Enter the breakdown SFC % </label>
+                  <input name="cypher_query" id="vari_choice" placeholder="Enter the breakdown SFC number" type="text" value=""
+                    required="required" data-error="Enter the order of SFC">
+				<!-- <label for="nccases">Number of NonConformance SFC:</label>
+				<input type="number" id="nccases" name="nccases"
+					   min="1" max="1000"> -->
+				
+			  </div>
+			
         </div>
       </div>
-      <div id="myLogFile"></div>      
-    </div>
+      <div id="myLogFile">
+		<div style="text-align:center;padding:1em 0;float:left"> <h3><a style="text-decoration:none;" href="https://www.zeitverschiebung.net/en/country/de"><span style="color:gray;">Production Time in</span><br />Lotte Plant</a></h3> <iframe src="https://www.zeitverschiebung.net/clock-widget-iframe-v2?language=en&size=medium&timezone=Europe%2FBerlin" width="100%" height="115" frameborder="0" seamless></iframe> </div>
+		<div class="panel panel-primary panel-colorful">
+        		<div class="panel-body text-center">
+        			<p class="text-uppercase mar-btm text-sm">Shipping Time for Monty2</p>
+        			<i class="fa fa-shopping-cart fa-5x"></i>
+        			<hr>
+        			<p id="carttime" class="h2 text-thin">Live Tracker</p>
+        			<small style="text-align: center;float: right;"><span id="cartdelay" class="text-semibold"><i class="fa fa-shopping-cart fa-fw"></i> No</span> Delay expected for shipment </small>
+        		</div>
+        	</div>
+		<div id="testResults" width="200" height="200" style="text-align: center;"></div>
+	
+	  </div>    
+	<div id="clockResults" width="200" height="200" style="width: 25%;margin-right: 30vw;margin-left: 30vw; margin-top: 5vw;"></div>	
+<button id="showCSV" style="display: table;margin-left: 35vw;" class="submit center-block btn btn-primary" type="button" >Simulation Results</button>	
+	
   </div>
-</section>
+  </div>
