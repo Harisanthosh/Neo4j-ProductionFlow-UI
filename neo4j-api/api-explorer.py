@@ -5,18 +5,26 @@ import sys
 import json
 from neo4j import GraphDatabase
 import nxneo4j
-sys.path.insert(1, 'C:/Users/H395978/PycharmProjects/Neo4j-ProductionFlow-UI/simpy-models')
-import PMFormatter as pm
+import h2o
+h2o.init()
+#sys.path.insert(1, 'C:/Users/H395978/PycharmProjects/Neo4j-ProductionFlow-UI/simpy-models')
+#import h2oexplorer
+import MEFI3RegressionTrees as mefi3
+sys.path.insert(1, 'C:/Users/H395978/PycharmProjects/Neo4j-ProductionFlow-UI/simpy-models/')
+import Monty2Simulator as mty2
+import simulateddata_viewer as simview
+#import PMFormatter as pm
 
 origins = [
-    "http://localhost",
+    "http://127.0.0.1",
     "http://localhost:8887",
+    "http://127.0.0.1:8887/"
 ]
-app = FastAPI(title="Graph Algorithms", description="Create and execute graph algorithms in neo4j")
+app = FastAPI(title="Gas Meter API", description="API testing interface by Honeywell's Production Intelligence team")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -163,7 +171,7 @@ def read_root():
 
 @app.get("/startsimulator/{start_time}/{end_time}")
 def start_simulator(start_time: str, end_time: str):
-    pm.invoker_api(start_time,end_time)
+    #pm.invoker_api(start_time,end_time)
     return {"Simulator Started!"}
 
 @app.post("/createnodes/{graph_query}")
@@ -172,33 +180,80 @@ def create_graph(graph_query: str):
     return cx.create_graph(graph_query)
     #return {"item_id": item_id, "q": q}
 
-@app.get("/getnodes")
-def get_nodes_from_graph():
-    cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
-    return cx.get_greetings()
+@app.get("/gettimeseries/{sfc_quantity}/{variation}")
+def get_timeduraration_of_shoporder(sfc_quantity: str, variation: str,oper_choice: str = None,sfc_bw_choice: str = None,ventil_choice: str = None,nc_cases: str = None):
+    ventil_flag = ventil_choice if ventil_choice != None else "no"
+    #Disabled temporarily
+    last_date = mty2.api_invoker(ventil_flag,sfc_quantity,variation,oper_choice,sfc_bw_choice,nc_cases)
+    #simview.invoke_as_api()
+    rt_forecast = mefi3.sim_pred_formulator()
+    shop_forecast_val = mefi3.monty_shift_so_forecaster(rt_forecast,sfc_quantity,last_date)
+    #sfc_query = int(sfc_quantity) / 150
+    #shop_forecast_val = mefi3.timeseries_shoporder_monty_millis(rt_forecast,int(sfc_quantity),sfc_query,None)
+    #shop_forecast_val = mefi3.ts_shoporder_monty_forecaster(rt_forecast,sfc_quantity)
+    return {"rt_forecast":rt_forecast, "shoporder_forecast":shop_forecast_val}
 
 
-@app.get("/getcentrality")
-def get_closeness_centrality_of_graph():
-    cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
-    return cx.get_closeness_centrality()
+@app.get("/shoporder/{sfc_quantity}")
+def get_shoporder_forecast_mefi3(sfc_quantity: str):
+    #cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
+    estimate = mefi3.estimate_shoporder(sfc_quantity)
+    forecast = mefi3.arima_predictor()
+    return {f"Forecast for the shop order is on {estimate} as {int(forecast[0])} SFC's can be produced in the next hour!"}
 
-@app.get("/getrank")
-def get_rank_of_graph():
-    cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
-    return cx.get_page_rank()
+@app.get("/montyshoporder/{sfc_quantity}/{casing}/{ventil}")
+def get_monty_shoporder_forecast(sfc_quantity: str,casing: str, ventil: str):
+    #cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
+    #estimate = h2oexplorer.estimate_shoporder(sfc_quantity)
+    estimate, time_ms  = mefi3.estimate_shoporder_monty(sfc_quantity, casing, ventil)
+    forecast = mefi3.monty_arima_predictor()
+    return {f"Forecast for the shop order is on {estimate} as {int(forecast[0])} SFC's can be produced in the next hour!"}
 
-@app.get("/betweennesscentrality")
-def get_betweeness_centrality_of_graph():
-    cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
-    return cx.get_betweenness_centrality()
+@app.get("/monty2/{sfc_quantity}/{casing}/{ventil}")
+def monty2_shoporder_forecaster(sfc_quantity: str,casing: str, ventil: str):
+    estimate, time_ms = mefi3.estimate_shoporder_monty(sfc_quantity, casing, ventil)
+    print(f"the time in ms is {time_ms} and the time taken for one SFC completion is {estimate}")
+    forecast = mefi3.monty_arima_predictor()
+    final_time = mefi3.estimate_timeseries_shoporder_monty(time_ms,int(sfc_quantity))
+    time = {}
+    time['Single SFC'] = estimate
+    time['Entire ShopOrder'] = final_time
+    return json.dumps(time)
 
-@app.get("/harmoniccentrality")
-def get_harmonic_centrality_of_graph():
-    cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
-    return cx.get_harmonic_centrality()
+@app.get("/monty2shoporder/{sfc_quantity}/{casing}/{ventil}")
+def monty2_total_shoporder_forecast(sfc_quantity: str,casing: str, ventil: str, datetime: str = None):
+    """
+    Datetime field is optional, if not provided it will estimate from the current time of execution
+    [Note]: Enter datetime in the following format YYYY-MM-DD HH:MM:SS example:2020-04-27 19:35:00
+    """
+    #estimate, time_ms = mefi3.estimate_shoporder_monty(sfc_quantity, casing, ventil)
+    estimate, time_ms = mefi3.estimate_sfc_totaltime(sfc_quantity, casing, ventil,datetime)
+    #estimate_sfc_totaltime
+    print(f"the time in ms is {time_ms} and the time taken for one SFC completion is {estimate}")
+    sfc_query = int(sfc_quantity) / 150
+    final_time = mefi3.timeseries_shoporder_monty_millis(time_ms,int(sfc_quantity),sfc_query,datetime)
+    time = {}
+    time['Arrival of First SFC'] = estimate
+    time['Completion of Entire ShopOrder'] = final_time
+    return json.dumps(time)
 
-@app.get("/shortestpath")
-def get_shortest_path_between_two_nodes(p1: str,p2: str):
-    cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
-    return cx.get_shortest_path(p1,p2)
+
+# @app.get("/getcentrality")
+# def get_closeness_centrality_of_graph():
+#     cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
+#     return cx.get_closeness_centrality()
+#
+# @app.get("/betweennesscentrality")
+# def get_betweeness_centrality_of_graph():
+#     cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
+#     return cx.get_betweenness_centrality()
+#
+# @app.get("/harmoniccentrality")
+# def get_harmonic_centrality_of_graph():
+#     cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
+#     return cx.get_harmonic_centrality()
+#
+# @app.get("/shortestpath")
+# def get_shortest_path_between_two_nodes(p1: str,p2: str):
+#     cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
+#     return cx.get_shortest_path(p1,p2)
