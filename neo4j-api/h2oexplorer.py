@@ -29,26 +29,47 @@ def show_entry_fields():
     predicted_time = f"{predicted_val:%d-%m-%Y %H:%M:%S}"
     print(f'The Start time for the SFC is {orig_time}')
     print(f'The estimated time of completion for the first SFC is {predicted_time}')
-    full_time = predict * num1
+    full_time = predict * int(num1)
     full_val = datetime.now() + timedelta(seconds=int(full_time))
     shoporder_time = f"{full_val:%d-%m-%Y %H:%M:%S}"
     print(f'The estimated time of completion for the last SFC for the Shop Order is {shoporder_time}')
-master = tk.Tk()
-# tk.Label(master,
-#          text="First Name").grid(row=0)
-tk.Label(master,
-         text="Number of SFC's to Release").grid(row=1)
 
-e2 = tk.Entry(master)
+def estimate_shoporder(qty):
+    print(f"Number of SFC's are {qty}")
+    #Importing to work further, for making single shot predictions it is not needed
+    mojo_model = h2o.import_mojo(model_path)
+    #print(mojo_model)
+    predict = mojo_model.predict(hf)
+    orig_time = f"{datetime.now():%d-%m-%Y %H:%M:%S}"
+    print(predict)
+    predicted_val = datetime.now() + timedelta(seconds=int(predict))
+    predicted_time = f"{predicted_val:%d-%m-%Y %H:%M:%S}"
+    print(f'The Start time for the SFC is {orig_time}')
+    print(f'The estimated time of completion for the first SFC is {predicted_time}')
+    full_time = predict * int(qty)
+    full_val = datetime.now() + timedelta(seconds=int(full_time))
+    shoporder_time = f"{full_val:%d-%m-%Y %H:%M:%S}"
+    print(f'The estimated time of completion for the last SFC for the Shop Order is {shoporder_time}')
+    return shoporder_time
 
-e2.grid(row=1, column=1)
-tk.Button(master,
-          text='Show', command=show_entry_fields).grid(row=3,
-                                                       column=1,
-                                                       sticky=tk.W,
-                                                       pady=4)
 
-tk.mainloop()
+
+if __name__ == "__main__":
+    master = tk.Tk()
+    # tk.Label(master,
+    #          text="First Name").grid(row=0)
+    tk.Label(master,
+             text="Number of SFC's to Release").grid(row=1)
+
+    e2 = tk.Entry(master)
+
+    e2.grid(row=1, column=1)
+    tk.Button(master,
+              text='Show', command=show_entry_fields).grid(row=3,
+                                                           column=1,
+                                                           sticky=tk.W,
+                                                           pady=4)
+    tk.mainloop()
 #mojo_model.varimp_plot()
 #h2o.print_mojo(model_path, format='json', tree_index=None)
 

@@ -1,0 +1,161 @@
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" type="text/css" rel="stylesheet" media="screen" /> -->
+<link href="timingfield.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="node_modules/neovis.js/dist/neovis.js"></script>
+<script src="node_modules/svidget/dist/svidget.js"></script>
+<script type="module" src="shoporderforecast.js"></script>
+<script type="module" src="timingfield.js"></script>
+<!-- <script type="module" src="moment.min.js"></script>
+<script type="module" src="bootstrap.bundle.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/momentjs/2.14.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<div class="topnav">
+  <a class="forecasting" href="#home">Real Time Dashboard</a>
+  <a class="meterconfig" href="#meterconfig">GasMeter Configuration</a>
+  <a class="active" href="#mining">Forecasting Dashboard</a>
+</div>
+  <div class="wrapper" style="background-color: beige;">
+    <div class="container">	
+	<div class="row1">
+	  <img src="honeywelllogo.png" alt="Honeywell" style="width: 50%;/* height: auto; */margin-left: auto;margin-right: auto;text-align: center;vertical-align: middle;display: table-cell;">
+        <div class="col-xs-12 section5 text-center">
+          <h2 class="h1 font-w400">Gas Meter Forecasting</h2>
+          <p class="margin-top-m margin-bottom-m">Shift planner and order forecaster</p>
+        </div>
+      </div>
+	  
+	  <div class="row1" style="text-align: center;margin-left: 12vw;">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+          <form name="shiftForm" method="" role="form" data-toggle="validator" novalidate="true" id="shiftForm">
+              
+			<!-- <label for="meter_prod_id">Select the Gas Meter Item Id for production</label>
+				<select name="meter_prod_id" id="meter_prod_id">
+				  <option value="A011600">A011600 Stutzen befetten </option>
+				  <option value="A011800">A011800 Aussenmagnet montieren </option>
+				  <option value="A011900" selected="selected">A011900 Messwerk einsetzen </option>
+				  <option value="A012000">A012000 Oberteil dosieren </option>
+				  <option value="A012200">A012200 Unterteil aufsetzen </option>
+				</select><br/><br/> -->
+				<label for="meter_prod_id">Select the Gas Meter Item Id for production</label>
+				<select name="meter_prod_id" id="meter_prod_id">
+					<option value="">select</option>
+				</select><br/><br/>
+				<table class="table">
+					<thead class="thead-dark">
+						<tr>
+							<th>Sunday</th>
+							<th>Monday</th>
+							<th>Tuesday</th>
+							<th>Wednesday</th>
+							<th>Thursday</th>
+							<th>Friday</th>
+							<th>Saturday</th>
+						</tr>
+					</thead>
+				  <tr>
+					<td>14-06-2020</td>
+					<td>15-06-2020</td>
+					<td>16-06-2020</td>
+					<td>17-06-2020</td>
+					<td>18-06-2020</td>
+					<td>19-06-2020</td>
+					<td>20-06-2020</td>
+				  </tr>
+				  <tr>
+					<td>Early</td>
+					<td>Early</td>
+					<td>Early</td>
+					<td>Early</td>
+					<td>Early</td>
+					<td>Early</td>
+					<td>Early</td>
+				  </tr>
+				  <tr>
+					<td>Late</td>
+					<td>Late</td>
+					<td>Late</td>
+					<td>Late</td>
+					<td>Late</td>
+					<td>Late</td>
+					<td>Late</td>
+				  </tr>
+				  <tr>
+					<td>Night</td>
+					<td>Night</td>
+					<td>Night</td>
+					<td>Night</td>
+					<td>Night</td>
+					<td>Night</td>
+					<td>Night</td>
+				  </tr>
+				</table><br/><br/>
+
+              <div class="row">
+              </div>
+			  <input class="submit center-block btn btn-primary" value="Submit" type="submit"> <br/><br/>			  
+			
+        </div>
+      </div> 
+	
+	<div id="durationShifts" width="200" height="200" style="text-align: center;"></div><br/>	
+	<button id="configForecast" style="display: table;margin-left: 32vw;" class="submit center-block btn btn-primary" type="button" >Configure Forecasting</button>	<br/><br/>
+	
+					<table id="outputTable" class="table">
+					<thead class="thead-dark">
+						<tr>
+							<th>Quantity</th>
+							<th>Item</th>
+							<th>Start</th>
+							<th>Estimated delivery time</th>
+							<th>Actual delivery close</th>
+							<th>Close order</th>
+						</tr>
+					</thead>
+				  <tr>
+					<td>800</td>
+					<td>800011481</td>
+					<td>16-06-2020 05:45:00</td>
+					<td>16-06-2020 12:55:00</td>
+					<td> 
+						<div class='input-group date' id='datetimepicker1'>
+							<input type='text' class="form-control" />
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+						</div>
+					</td>
+					<td><form><input type="submit" class="submit center-block btn btn-primary" value="Close"></form> </td>
+				  </tr>
+				  <tr>
+					<td>800</td>
+					<td>800011481</td>
+					<td>16-06-2020 05:45:00</td>
+					<td>16-06-2020 12:55:00</td>
+					<td> 
+						<div class='input-group date' id='datetimepicker1'>
+							<input type='text' class="form-control" />
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+						</div>
+					</td>
+					<td><form><input type="submit" class="submit center-block btn btn-primary" value="Close"></form>  </td>
+				  </tr>
+				</table>
+	
+	</div>
+	
+  </div>

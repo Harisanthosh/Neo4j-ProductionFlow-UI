@@ -1,10 +1,16 @@
 from fastapi import FastAPI, File, Form, UploadFile
 from starlette.middleware.cors import CORSMiddleware
 import pandas as pd
+from typing import List, Set
 import sys
 import json
 from neo4j import GraphDatabase
 import nxneo4j
+import subprocess
+import string
+from datetime import datetime
+
+from pydantic import BaseModel
 import h2o
 h2o.init()
 #sys.path.insert(1, 'C:/Users/H395978/PycharmProjects/Neo4j-ProductionFlow-UI/simpy-models')
@@ -20,6 +26,46 @@ origins = [
     "http://localhost:8887",
     "http://127.0.0.1:8887/"
 ]
+
+
+class ConfigSimulator(BaseModel):
+    name: str
+    ventiltype: str = None
+    stutzen_befetten_time: float
+    aussenmagnet_montieren_time: float
+    messwerk_einsetzen_time: float
+    oberteil_dosieren_time: float
+    unterteil_aufsetzen_time: float
+    falz_auflegen_time: float
+    zähler_vorbördeln_time: float
+    zähler_fertigbördeln_time: float
+    zähler_dichtheitsprüfen_time: float
+    zähler_abstapeln_time: float
+    version: float
+
+class ConfigSimulatorWaitingTime(BaseModel):
+    name: str
+    ventiltype: str = None
+    stutzen_befetten_waiting_time: float
+    aussenmagnet_montieren_waiting_time: float
+    messwerk_einsetzen_waiting_time: float
+    oberteil_dosieren_waiting_time: float
+    unterteil_aufsetzen_waiting_time: float
+    falz_auflegen_waiting_time: float
+    zähler_vorbördeln_waiting_time: float
+    zähler_fertigbördeln_waiting_time: float
+    zähler_dichtheitsprüfen_waiting_time: float
+    zähler_abstapeln_waiting_time: float
+    version: float
+
+class DateShift(BaseModel):
+    day: str
+    shift: str
+
+
+class Shifts(BaseModel):
+    shifts: List[DateShift] = None
+
 app = FastAPI(title="Gas Meter API", description="API testing interface by Honeywell's Production Intelligence team")
 
 app.add_middleware(
@@ -174,6 +220,12 @@ def start_simulator(start_time: str, end_time: str):
     #pm.invoker_api(start_time,end_time)
     return {"Simulator Started!"}
 
+@app.get("/preparedata")
+def prepare_production_log():
+    #pm.invoker_api(start_time,end_time)
+    subprocess.call([r'C:\Users\H395978\PycharmProjects\Neo4j-ProductionFlow-UI\workflow_automater.bat'])
+    return {"Executing KNIME Workflow"}
+
 @app.post("/createnodes/{graph_query}")
 def create_graph(graph_query: str):
     cx = GraphAlgorithms("bolt://localhost:7687", "neo4j", "honeywell123!")
@@ -181,18 +233,31 @@ def create_graph(graph_query: str):
     #return {"item_id": item_id, "q": q}
 
 @app.get("/gettimeseries/{sfc_quantity}/{variation}")
-def get_timeduraration_of_shoporder(sfc_quantity: str, variation: str,oper_choice: str = None,sfc_bw_choice: str = None,ventil_choice: str = None,nc_cases: str = None):
+def get_timeduraration_of_shoporder(sfc_quantity: str, variation: str,oper_choice: str = None,sfc_bw_choice: str = None,ventil_choice: str = None,nc_cases: str = None,orig_sfc_qty: str = None):
     ventil_flag = ventil_choice if ventil_choice != None else "no"
-    #Disabled temporarily
     last_date = mty2.api_invoker(ventil_flag,sfc_quantity,variation,oper_choice,sfc_bw_choice,nc_cases)
-    #simview.invoke_as_api()
+    #Add condtion to control last date for normal simulation run
+    if oper_choice == None:
+        last_date = None
     rt_forecast = mefi3.sim_pred_formulator()
-    shop_forecast_val = mefi3.monty_shift_so_forecaster(rt_forecast,sfc_quantity,last_date)
+    #shop_forecast_val = mefi3.monty_shift_so_forecaster(rt_forecast,sfc_quantity,last_date)
+    shop_forecast_val = mefi3.monty_shift_so_forecaster_updated(rt_forecast,sfc_quantity,orig_sfc_qty,last_date)
     #sfc_query = int(sfc_quantity) / 150
     #shop_forecast_val = mefi3.timeseries_shoporder_monty_millis(rt_forecast,int(sfc_quantity),sfc_query,None)
     #shop_forecast_val = mefi3.ts_shoporder_monty_forecaster(rt_forecast,sfc_quantity)
     return {"rt_forecast":rt_forecast, "shoporder_forecast":shop_forecast_val}
 
+@app.post("/createsimulator/")
+async def config_simulator(item: ConfigSimulator):
+    item_dict = item.dict()
+    mty2.create_simulator(item_dict)
+    return item_dict
+
+@app.post("/createwaitingtimesimulator/")
+async def config_waiting_time_simulator(item: ConfigSimulatorWaitingTime):
+    item_dict = item.dict()
+    mty2.create_waiting_time_simulator(item_dict)
+    return item_dict
 
 @app.get("/shoporder/{sfc_quantity}")
 def get_shoporder_forecast_mefi3(sfc_quantity: str):
@@ -221,7 +286,7 @@ def monty2_shoporder_forecaster(sfc_quantity: str,casing: str, ventil: str):
     return json.dumps(time)
 
 @app.get("/monty2shoporder/{sfc_quantity}/{casing}/{ventil}")
-def monty2_total_shoporder_forecast(sfc_quantity: str,casing: str, ventil: str, datetime: str = None):
+def monty2_total_shoporder_forecast(sfc_quantity: str,casing: str, ventil: str, datetime: str = None,query_shifts: str = None):
     """
     Datetime field is optional, if not provided it will estimate from the current time of execution
     [Note]: Enter datetime in the following format YYYY-MM-DD HH:MM:SS example:2020-04-27 19:35:00
@@ -230,11 +295,37 @@ def monty2_total_shoporder_forecast(sfc_quantity: str,casing: str, ventil: str, 
     estimate, time_ms = mefi3.estimate_sfc_totaltime(sfc_quantity, casing, ventil,datetime)
     #estimate_sfc_totaltime
     print(f"the time in ms is {time_ms} and the time taken for one SFC completion is {estimate}")
+    if query_shifts != None:
+        print(query_shifts)
     sfc_query = int(sfc_quantity) / 150
     final_time = mefi3.timeseries_shoporder_monty_millis(time_ms,int(sfc_quantity),sfc_query,datetime)
     time = {}
     time['Arrival of First SFC'] = estimate
     time['Completion of Entire ShopOrder'] = final_time
+    return json.dumps(time)
+
+@app.post("/monty2shoporder/{sfc_quantity}/{casing}/{ventil}")
+def monty2_total_shoporder_forecast_with_shifts(shift:Shifts, sfc_quantity: str,casing: str, ventil: str, datetime1: str = None):
+    """
+    Datetime field is optional, if not provided it will estimate from the current time of execution
+    [Note]: Enter datetime in the following format YYYY-MM-DD HH:MM:SS example:2020-04-27 19:35:00
+    """
+    #estimate, time_ms = mefi3.estimate_sfc_totaltime(sfc_quantity, casing, ventil,datetime)
+    #estimate_sfc_totaltime 1032.65
+    #print(f"the time in ms is {time_ms} and the time taken for one SFC completion is {estimate}")
+    item_dict = shift.dict()
+    #print(item_dict)
+    sfc_query = int(sfc_quantity) / 150
+    orig_date = datetime.strptime(datetime1,'%Y-%m-%d %H:%M:%S')
+    final_time = mefi3.timeseries_shoporder_monty_millis(1032.65,int(sfc_quantity),sfc_query,datetime1)
+    my_date = datetime.strptime(final_time,'%d-%m-%Y %H:%M:%S')
+    parsed_date = my_date.strftime('%d/%m/%Y %H:%M:%S %p')
+    print(parsed_date)
+    curr_shift = mty2.shift_estimator(orig_date,my_date,item_dict)
+    #print(f"The predicted time is in {curr_shift} Shift!")
+    time = {}
+    #time['Arrival of First SFC'] = estimate
+    time['Completion of Entire ShopOrder'] = curr_shift
     return json.dumps(time)
 
 

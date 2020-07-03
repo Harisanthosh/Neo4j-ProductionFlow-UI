@@ -23,6 +23,7 @@
   "homepage": "https://github.com/Harisanthosh/Neo4j-ProductionFlow-UI#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "neovis.js": "^1.2.1"
+    "neovis.js": "^1.2.1",
+    "svidget": "^0.3.5"
   }
 }

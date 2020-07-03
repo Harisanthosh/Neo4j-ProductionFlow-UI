@@ -9,15 +9,21 @@ import locale
 from matplotlib import pyplot
 from statsmodels.tsa.arima_model import ARIMA
 from sklearn.metrics import mean_squared_error
+import configparser
+config = configparser.ConfigParser()
+config.read("C:/Users/H395978/PycharmProjects/Neo4j-ProductionFlow-UI/setup.ini")
 
-
-model_path = 'C:/Users/H395978/AppData/Local/Programs/Thesis/stamm/ml_models/mefi3_sfc_regressiontrees'
-monty_path = 'C:/Users/H395978/AppData/Local/Programs/Thesis/stamm/ml_models/monty2_sfc_regressiontrees_features'
-monty_path_new = 'C:/Users/H395978/AppData/Local/Programs/Thesis/stamm/ml_models/monty2_sfc_regressiontrees_features_new'
-monty_so_path = 'C:/Users/H395978/AppData/Local/Programs/Thesis/stamm/ml_models/monty2_shoporder_regressiontrees'
-monty_so_path_millis = 'C:/Users/H395978/AppData/Local/Programs/Thesis/stamm/ml_models/monty2_shoporder_regressionforest_millis'
-monty2_so_daybyday = 'C:/Users/H395978/AppData/Local/Programs/Thesis/stamm/ml_models/m2_regressiontrees_totaltime'
-monty2_so_shifts = 'C:/Users/H395978/AppData/Local/Programs/Thesis/stamm/ml_models/mty2_totaltime_shifts'
+#model_file_path = 'C:/Users/H395978/AppData/Local/Programs/Thesis/stamm/ml_models/'
+model_file_path = config['MODEL_SETTINGS']['model_file_path']
+print(model_file_path)
+model_path = model_file_path+'/mefi3_sfc_regressiontrees'
+monty_path = model_file_path+'/monty2_sfc_regressiontrees_features'
+monty_path_new = model_file_path+'/monty2_sfc_regressiontrees_features_new'
+monty_so_path = model_file_path+'/monty2_shoporder_regressiontrees'
+monty_so_path_millis = model_file_path+'/monty2_shoporder_regressionforest_millis'
+monty2_so_daybyday = model_file_path+'/m2_regressiontrees_totaltime'
+monty2_so_shifts = model_file_path+'/mty2_totaltime_shifts'
+monty2_so_shifts_upd = model_file_path+'/mty2_totaltime_shifts_gradientboost'
 #saved_model = h2o.load_model(model_path)
 #Make sure h2o.init() is executed in a separate terminal
 #h2o.init()
@@ -283,10 +289,6 @@ def estimate_timeseries_shoporder_monty(time,sfc_released):
     predicted_val = datetime.now() + timedelta(seconds=int(predict))
     predicted_time = f"{predicted_val:%d-%m-%Y %H:%M:%S}"
     print(f'The estimated time of completion for the entire {sfc_released} SFCs are {predicted_time}')
-    # full_time = predict
-    # full_val = datetime.now() + timedelta(seconds=int(full_time))
-    # shoporder_time = f"{full_val:%d-%m-%Y %H:%M:%S}"
-    # print(f'The estimated time of completion for the last SFC for the Shop Order is {shoporder_time}')
     return predicted_time
 
 def timeseries_shoporder_monty_millis(time,sfc_released,sfc_factor,date_stamp=None):
@@ -325,6 +327,45 @@ def timeseries_shoporder_monty_millis(time,sfc_released,sfc_factor,date_stamp=No
         predicted_val = datetime.now() + timedelta(seconds=int(predict)) if flow_state == 1 else datetime.strptime(date_stamp,'%Y-%m-%d %H:%M:%S') + timedelta(seconds=int(predict))
 
     predicted_time = f"{predicted_val:%d-%m-%Y %H:%M:%S}"
+    print(f'The estimated time of completion for the entire {sfc_released} SFCs are {predicted_time}')
+    return predicted_time
+
+def timeseries_shoporder_monty_millis2(time,sfc_released,sfc_factor,date_stamp=None):
+    print(f"Time taken for one SFC's is {time} and the total SFC released for the next hour {sfc_released}")
+    cols_monty = ['SFC_Released','SFC_Completed','TOTAL_TIME','Unique concatenate(ITEM_GROUP)','Last(DATE_TIME)','First(DATE_TIME)','Day of month','Hour','Day of week (name)','Unique count(WORK_CENTER)','Month (number)','Sum(QTY_SCRAPPED)','Sum(QTY_NON_CONFORMED)']
+    locale.setlocale(locale.LC_ALL, 'deu_deu')
+    flow_state = 1
+    if(date_stamp == None):
+        hour = f"{datetime.now():%H}"
+        day_int = f"{datetime.now():%d}"
+        day_str = datetime.today().strftime('%A')
+        month_num = f"{datetime.now():%m}"
+    else:
+        hour = f"{datetime.strptime(date_stamp,'%Y-%m-%d %H:%M:%S'):%H}"
+        day_int = f"{datetime.strptime(date_stamp,'%Y-%m-%d %H:%M:%S'):%d}"
+        day_str = datetime.strptime(date_stamp,'%Y-%m-%d %H:%M:%S').strftime('%A')
+        month_num = f"{datetime.strptime(date_stamp,'%Y-%m-%d %H:%M:%S'):%m}"
+        flow_state = 0
+
+    print(day_str,day_int,month_num,hour)
+    vals_monty = [298,sfc_released,time,'A01PP000300, A01PP000100','09.09.19 12:59:58','09.09.19 12:00:00',int(day_int),int(hour),day_str,7,month_num,0,0]
+    #Importing to work further, for making single shot predictions it is not needed
+    mojo_model = h2o.import_mojo(monty_so_path_millis)
+    print(vals_monty)
+    df3 = pd.DataFrame([vals_monty],columns=cols_monty)
+    hf3 = h2o.H2OFrame(df3)
+    predict = int(mojo_model.predict(hf3)) / 1000
+    orig_time = f"{datetime.now():%d-%m-%Y %H:%M:%S}"
+    print(predict)
+    if (sfc_factor < 1 and flow_state == 1):
+        predicted_val = datetime.now() + timedelta(seconds=int(predict))
+    elif(sfc_factor < 1 and flow_state == 0):
+        predicted_val = datetime.strptime(date_stamp,'%Y-%m-%d %H:%M:%S') + timedelta(seconds=int(predict))
+    else:
+        predict *= sfc_factor
+        predicted_val = datetime.now() + timedelta(seconds=int(predict)) if flow_state == 1 else datetime.strptime(date_stamp,'%Y-%m-%d %H:%M:%S') + timedelta(seconds=int(predict))
+
+    predicted_time = f"{predicted_val:'%m/%d/%Y %H:%M:%S %p'}"
     print(f'The estimated time of completion for the entire {sfc_released} SFCs are {predicted_time}')
     return predicted_time
 
@@ -402,6 +443,7 @@ def monty_shift_so_forecaster(time,sfc_released,date_stamp=None):
     print(f'The estimated time of completion for the entire {sfc_released} SFCs are {predicted_time}')
     return predicted_time
 
+#Conceptualized to invoke with initial SFC Released
 def monty_shift_so_forecaster_updated(time,sfc_released,sfc_completed,date_stamp=None):
     print(f"Time taken for one SFC's is {time} and the total SFC released for the next hour {sfc_released}")
     cols_monty = ['shifts','SFC_Completed','SFC_Released','Day of week (name)','Unique concatenate(ITEM_GROUP)','MEAN_TOTAL_TIME','Month (number)']
@@ -418,7 +460,11 @@ def monty_shift_so_forecaster_updated(time,sfc_released,sfc_completed,date_stamp
         day_str = datetime.strptime(date_stamp,'%d-%m-%Y %H:%M:%S').strftime('%A')
         month_num = f"{datetime.strptime(date_stamp,'%d-%m-%Y %H:%M:%S'):%m}"
         flow_state = 0
-
+    if(sfc_completed == None):
+        sfc_completed = sfc_released
+    # else:
+    #     sfc_simulated = sfc_released
+    #     sfc_released = sfc_completed
     print(day_str,day_int,month_num,hour)
     if (int(hour) >= 6 and int(hour) < 14):
         shift_name = "Früh"
@@ -430,13 +476,14 @@ def monty_shift_so_forecaster_updated(time,sfc_released,sfc_completed,date_stamp
         shift_name = "Nacht"
 
     vals_monty = [shift_name,int(sfc_completed),int(sfc_released),day_str,'A01PP000300, A01PP000100',time,month_num]
-    mojo_model = h2o.import_mojo(monty2_so_shifts)
+    mojo_model = h2o.import_mojo(monty2_so_shifts_upd)
     print(vals_monty)
     df3 = pd.DataFrame([vals_monty],columns=cols_monty)
     hfmty3 = h2o.H2OFrame(df3)
     predict = int(mojo_model.predict(hfmty3)) / 1000
     orig_time = f"{datetime.now():%d-%m-%Y %H:%M:%S}"
     print(predict)
+    print(date_stamp)
     predicted_val = datetime.now() + timedelta(seconds=int(predict)) if flow_state == 1 else datetime.strptime(date_stamp,'%d-%m-%Y %H:%M:%S') + timedelta(seconds=int(predict))
     predicted_time = f"{predicted_val:%d-%m-%Y %H:%M:%S}"
     print(f'The estimated time of completion for the entire {sfc_released} SFCs are {predicted_time}')

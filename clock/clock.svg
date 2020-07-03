@@ -1,0 +1,515 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svidget="http://www.svidget.org/svidget"
+		 width="400" height="400" viewBox="0 0 400 400">
+	<title>Clock Widget</title>
+	<desc>
+		A clock widget.
+		Pass in a time value, or it uses the system time.
+		This widget was developed by Joe Agster for svidget.com and is licensed under the Creative Commons Attribution 4.0 License.
+	</desc>
+
+	<svidget:params>
+		<svidget:param name="data" shortname="d" type="string" subtype="time" description="Time format is '00:00:00' or tick count. If not set, then local system time is used." onset="handleDataParamSet" />
+		<svidget:param name="backgroundColor" shortname="bcolor" type="string" subtype="color" defvalue="transparent" binding="#framemain@fill" description="The clock background color." />
+		<svidget:param name="frameColor" shortname="fcolor" type="string" subtype="color" defvalue="#000" binding="#framemain@stroke" description="The clock frame color." />
+		<svidget:param name="tickColor" shortname="tcolor" type="string" subtype="color" binding="#ticks g@stroke" description="The color of the tick marks on the clock." />
+		<svidget:param name="hourHandColor" shortname="hhcolor" type="string" subtype="color" binding="#hourhand@stroke" description="The hour hand color." />
+		<svidget:param name="minuteHandColor" shortname="mhcolor" type="string" subtype="color" binding="#minhand@stroke" description="The min hand color." />
+		<svidget:param name="secondHandColor" shortname="shcolor" type="string" subtype="color" binding="#sechand@stroke" description="The sec hand color." />
+		<svidget:param name="nobColor" shortname="ncolor" type="string" subtype="color" binding="#nob@fill" description="The nob color." />
+		<svidget:param name="tickLineType" shortname="tlt" type="string" subtype="choice" typedata="square|round" binding="#ticks g@stroke-linecap" description="The tick line type. Values are square or round." />
+		<svidget:param name="handLineType" shortname="hlt" type="string" subtype="choice" typedata="square|round" binding="#hands@stroke-linecap" description="The hand line type. Values are square or round." />
+		<svidget:param name="frameWidth" shortname="fw" type="number" defvalue="20" binding="#frame path@stroke-width" description="The width of the clock frame." />
+		<svidget:param name="labelStyle" shortname="ls" type="object" coerce="true" description="The style object for the label. Example { fontFamily: 'Arial', fontSize: '12px' }" onset="handleLabelParamSet" />
+		<svidget:param name="animationType" shortname="at" type="string" subtype="choice" typedata="smooth|tick" description="The animation type. Either smooth, for continuous motion, or tick for ticking motion." onset="handleAnimationParamSet" />
+		<svidget:param name="showLabels" shortname="sl" type="bool" coerce="true" defvalue="true" description="Whether to show the labels on the clock." onset="handleLabelParamSet" />
+		<svidget:param name="showAnimation" shortname="sa" type="bool" coerce="true" defvalue="true" description="Whether to show the clock as animated." onset="handleAnimationParamSet" />
+	</svidget:params>
+
+	<svidget:actions>
+		<svidget:action name="reset" binding="resetClock" description="Resets the clock to the original time specified." />
+		<svidget:action name="pause" binding="pauseClock" description="Pauses the clock." />
+		<svidget:action name="resume" binding="resumeClock" description="Resumes the clock." />
+	</svidget:actions>
+	
+	<svidget:events>
+		<svidget:event name="tick" description="Triggered as the clock moves to each second." />
+	</svidget:events>
+		
+	<style>
+		<![CDATA[
+			g#labels text { font-family: Helvetica, Arial; font-size: 32px; font-weight: bold; alignment-baseline: text-top; fill: #000; text-anchor: middle; }
+		]]>
+	</style>
+
+	<defs>
+		<linearGradient id="gradframe" y1="0" y2="100%" x1="0" x2="0">
+			<stop offset="0%" stop-color="#fff" stop-opacity="0.85" />
+			<stop offset="25%" stop-color="#fff" stop-opacity="0.35" />
+			<stop offset="50%" stop-color="#fff" stop-opacity="0.95" />
+			<stop offset="60%" stop-color="#000" stop-opacity="0.75" />
+			<stop offset="100%" stop-color="#fff" stop-opacity="0.8" />
+		</linearGradient>
+		<linearGradient id="gradframe2" y1="0" y2="100%" x1="0" x2="100%">
+			<stop offset="0%" stop-color="#fff" stop-opacity="0.75" />
+			<stop offset="50%" stop-color="#fff" stop-opacity="0.15" />
+			<stop offset="100%" stop-color="#000" stop-opacity="0.45" />
+		</linearGradient>
+	</defs>
+
+	<g id="frame">
+		<path id="framemain" fill="tomato" stroke="#2fcf2f" stroke-width="20" d="M200,11 A189,189 0 1,1 199.99,11" />
+		<path id="frameoverlay" fill="none" stroke="url(#gradframe2)" stroke-width="20" d="M200,11 A189,189 0 1,1 199.99,11" />
+	</g>
+
+	<g id="ticks">
+		<g id="ticks-major" stroke-linecap="round" stroke-width="10" stroke="#000">
+			<line x1="200" y1="32" x2="200" y2="48" />
+			<line x1="200" y1="32" x2="200" y2="48" transform="rotate(30 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="48" transform="rotate(60 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="48" transform="rotate(90 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="48" transform="rotate(120 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="48" transform="rotate(150 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="48" transform="rotate(180 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="48" transform="rotate(210 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="48" transform="rotate(240 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="48" transform="rotate(270 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="48" transform="rotate(300 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="48" transform="rotate(330 200 200)" />
+		</g>
+		<g id="ticks-minor" stroke-linecap="round" stroke-width="5" stroke="#000">
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(6 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(12 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(18 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(24 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(36 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(42 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(48 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(54 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(66 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(72 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(78 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(84 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(96 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(102 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(108 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(114 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(126 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(132 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(138 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(144 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(156 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(162 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(168 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(174 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(186 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(192 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(198 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(204 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(216 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(222 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(228 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(234 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(246 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(252 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(258 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(264 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(276 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(282 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(288 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(294 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(306 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(312 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(318 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(324 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(336 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(342 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(348 200 200)" />
+			<line x1="200" y1="32" x2="200" y2="38" transform="rotate(354 200 200)" />
+		</g>
+	</g>
+
+	<g id="labels">
+		<text id="h12" x="200" y="84">12</text>
+		<text id="h1" x="264" y="101.1487">1</text>
+		<text id="h2" x="310.8513" y="148">2</text>
+		<text id="h3" x="330" y="212">3</text>
+		<text id="h4" x="310.8513" y="276">4</text>
+		<text id="h5" x="264" y="322.8513">5</text>
+		<text id="h6" x="200" y="340">6</text>
+		<text id="h7" x="136" y="322.8513">7</text>
+		<text id="h8" x="89.1487" y="276">8</text>
+		<text id="h9" x="70" y="212">9</text>
+		<text id="h10" x="89.1487" y="148">10</text>
+		<text id="h11" x="136" y="101.1487">11</text>
+	</g>
+
+	<g id="hands" stroke-linecap="round">
+		<line id="hourhand" x1="200" y1="200" x2="200" y2="120" stroke-width="12" stroke="#000" />
+		<line id="minhand" x1="200" y1="200" x2="200" y2="90" stroke-width="8" stroke="#000" transform="rotate(256 200 200)"  />
+		<line id="sechand" x1="200" y1="200" x2="200" y2="30" stroke-width="2" stroke="#f22" transform="rotate(90 200 200)" />
+	</g>
+
+	<circle id="nob" r="16" cx="200" cy="200" stroke-width="0" fill="#777" />
+
+	<g>
+		<text id="footer" font-size="10" font-family="Helvetica" x="395" y="395" fill="#7f7f7f" text-anchor="end">
+			Powered by <a xlink:href="http://www.svidget.com" fill="#1f1f1f">Svidget.js</a>
+		</text>
+	</g>
+
+	<script type="application/javascript" xlink:href="../scripts/svidget.min.js"></script>
+	<script type="application/javascript" xlink:href="../scripts/snap.svg-min.js"></script>
+	<script type="application/javascript">
+		<![CDATA[
+	
+		// constants
+		var LABEL_RADIUS = 128;
+		var FONTSIZE_Y_ADJUST = 7/8; // space between pie and edge
+		var MILLSECS_12_HOUR = 12 * 60 * 60 * 1000; // h * m * s * ms
+		var MILLSECS_HOUR = 60 * 60 * 1000;
+		var CENTER_X = 200;
+		var CENTER_Y = 200;
+		var STYLE_MAPPINGS = { backgroundColor: "fill", borderColor: "stroke", borderWidth: "stroke-width", color: "fill", fontFamily: "font-family", fontSize: "font-size", fontWeight: "font-weight", fontStyle: "font-style", stroke: "stroke", strokeWidth: "stroke-width", strokeDashArray: "stroke-dasharray", textDecoration: "text-decoration" };
+		var DEFAULT_FONT_SIZE = "32px";
+		
+		// param variables
+		var _data = null;
+		var _frameWidth = 20;
+		var _frameColor = '#000';
+		var _labelStyle = {};
+		var _showLabels = true;
+		var _showAnimation = true;
+		var _animationType = 'smooth';
+		var _currentFontSize = DEFAULT_FONT_SIZE;
+
+		// general variables
+		var _clockDate = null;
+		var _startDate = null;
+		var _pauseDate = null;
+		var _clockOffset = 0; //number of millsecs since midnight
+		var _curTime = 0; //in number of millsecs since midnight
+		var _curTimeString = null;
+		var _pauseTicks = 0;
+		var _paused = false;
+		var _loaded = false;
+		
+		
+		/* Loading */
+		
+		// entry point
+		function init() {
+			//debugger;
+			console.log('init');
+			// init stuff
+			initParams();
+			draw();
+
+			_loaded = true;
+		}
+		
+		function initParams() {
+			loadParams();
+		}
+		
+		window.addEventListener('load', init, false);
+		
+		
+		/* Param Loading */
+		
+		function loadParams() {
+			//debugger;
+			var widget = svidget.$;
+			_data = widget.param("data").value();
+			_showAnimation = checkNull(widget.param("showAnimation").value(), _showAnimation);
+			loadLabelParams(widget);
+		}
+		
+		function loadLabelParams(widget) {
+			_labelStyle = checkNull(widget.param("labelStyle").value(), _labelStyle);
+			_showLabels = checkNull(widget.param("showLabels").value(), _showLabels);
+		}
+		
+		function loadAnimationParams(widget) {
+			_showAnimation = checkNull(svidget.$.param("showAnimation").value(), _showAnimation);
+			_animationType = checkNull(svidget.$.param("animationType").value(), _animationType);
+		}
+		
+		function handleDataParamSet(e) {
+			//debugger;
+			//console.log('handleDataParamSet');
+			if (!_loaded) return;
+			var widget = svidget.$;
+			_data = widget.param("data").value();
+			draw();
+		}
+		
+		function handleLabelParamSet(e) {
+			//debugger;
+			if (!_loaded) return;
+			loadLabelParams(svidget.$);
+			drawLabels();
+		}
+
+		function handleAnimationParamSet(e) {
+			//debugger;
+			if (!_loaded) return;
+			loadAnimationParams(svidget.$);
+			if (_showAnimation) startAnimation();
+		}
+
+
+		/* Drawing */
+		
+		function draw() {
+			loadDates();
+			drawLabels();
+			drawHands();
+			startAnimation();
+		}
+		
+		function drawLabels() {
+			//debugger;
+			if (_labelStyle == null) return;
+			var labelsEle = Snap("#labels").selectAll("text");
+			var fontSize = _labelStyle.fontSize || _currentFontSize;
+			var styleObj = toSnapStyleObject(_labelStyle || {});
+			var styleStr = toStyleString(styleObj);
+			if (!_showLabels) {
+				setVisibility(labelsEle, false); //.attr({ display: "none" });
+			}
+			else {
+				setVisibility(labelsEle, true);
+				labelsEle.attr({ style: styleStr });
+			}
+			
+			if (fontSize != _currentFontSize) {
+				_currentFontSize = fontSize;
+				repositionLabels(fontSize, labelsEle);
+			}
+		}
+		
+		function repositionLabels(fontSize, labelsEle) {
+			//debugger;
+			var bb = labelsEle[0].getBBox();
+			var h = bb.height * (20 / 23);
+			for (var i=0; i<labelsEle.length; i++) {
+				var p = getClockLabelPoint(h, i);
+				labelsEle[i].attr(p);
+			}
+		}
+		
+		function getClockLabelPoint(fontHeight, labelNum) {
+			// y = 56 + (font size * 7/8) -->
+			// center: x=200 y=72 r=128 cos(30)=110.8513 cos(60)=64
+			var radius = 144 - (fontHeight / 2);
+			var ylen = Math.cos((labelNum / 6) * Math.PI) * radius;
+			var xlen = Math.sin((labelNum / 6) * Math.PI) * radius;
+			var centerX = 200 + xlen;
+			var centerY = CENTER_Y - ylen; // this is the label center Y
+			var baseY = centerY + (fontHeight * (3/8));
+			return { x: centerX, y: baseY };
+		}
+		
+		function drawHands() {
+			drawHourHand();
+			drawMinHand();
+			drawSecHand();
+		}
+		
+		function drawHourHand() {
+			//console.log(_curTime);
+			//var hours = _curTime / 3600000; // 0-11.999
+			//var hoursOffset = (_startDate.getHours() - _startDate.getUTCHours());
+			//console.log(hours + "-" + hoursOffset);
+			//hours = (hours + hoursOffset) % 12;
+			//console.log(hours);
+			//if (_animationType == 'tick') hours = Math.floor(hours);
+			var hours = getCurrentHour();
+			var handEle = document.getElementById("hourhand");
+			var rotateTrans = rotateRatio(hours / 12);
+			handEle.setAttribute("transform", rotateTrans);
+		}
+		
+		function drawMinHand() {
+			//var mins = (_curTime % MILLSECS_HOUR) / 60000; // 0-59.999
+			var mins = getCurrentMin();
+			if (_animationType == 'tick') mins = Math.floor(mins);
+			var handEle = document.getElementById("minhand");
+			var rotateTrans = rotateRatio(mins / 60);
+			handEle.setAttribute("transform", rotateTrans);
+		}
+		
+		function drawSecHand() {
+			//var secs = (_curTime % 60000) / 1000; // 0-59.999
+			var secs = getCurrentSec();
+			if (_animationType == 'tick') secs = Math.floor(secs);
+			var handEle = document.getElementById("sechand");
+			var rotateTrans = rotateRatio(secs / 60);
+			handEle.setAttribute("transform", rotateTrans);
+		}
+		
+		function rotateRatio(ratio) {
+			ratio = ratio % 1;
+			var deg = ratio * 360;
+			return "rotate(" + deg + " " + CENTER_X + " " + CENTER_Y + ")";
+		}
+		
+		
+		/* Actions */
+		
+		function resetClock() {
+			draw();
+		}
+		
+		function pauseClock() {
+			if (_paused) return;
+			_paused = true;
+			_pauseDate = new Date();
+		}
+		
+		function resumeClock() {
+			if (!_paused) return;
+			var now = new Date();
+			var change = now - _pauseDate;
+			_pauseTicks += change;
+			//console.log("pauseTicks: " + _pauseTicks);
+			_paused = false;
+			startAnimation();
+		}
+		
+		
+		/* Events */
+		
+		function triggerTick(timeStr) {
+			if (_curTimeString == timeStr) return;
+			svidget.$.event("tick").trigger({ time: timeStr });
+		}
+		
+		
+		/* Animation */
+		
+		function startAnimation() {
+			animateHands();
+		}
+		
+		function animateHands() {
+			if (!_showAnimation || _paused) return;
+			updateCurTime();
+			drawHands();
+			triggerTick(toTimeString(_curTime));
+			window.requestAnimationFrame(animateHands);
+		}
+		
+		function updateCurTime() {
+			var now = new Date();
+			var change = now - _startDate - _pauseTicks;
+			// note: with tick, all 3 hands are synched to the tick mark (due to this rounding effect)
+			// if (_animationType == "tick") change = Math.floor(change / 1000) * 1000;
+			_curTime = (_clockOffset + change) % MILLSECS_12_HOUR;
+		}
+		
+		var requestAnimFrame = window.requestAnimationFrame ||
+                       window.webkitRequestAnimationFrame ||
+                       window.mozRequestAnimationFrame ||
+                       window.oRequestAnimationFrame ||
+                       window.msRequestAnimationFrame ||
+											 animFrame;
+    
+		
+		function animFrame(callback) {
+			setTimeout(callback, 80);
+		};
+		
+		
+		/* Date/Time */
+		
+		function loadDates() {
+			_clockDate = getClockDate();
+			_startDate = new Date(); // now
+			_clockOffset = (+_clockDate) % MILLSECS_12_HOUR;
+			//console.log(_clockOffset);
+			_curTime = _clockOffset;
+			_pauseTicks = 0;
+		}
+		
+		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
+		function getClockDate() {
+			if (_data == null) return new Date(); 
+			if (_data.indexOf(":") >= 0) {
+				var dateStr = "Wed, 09 Aug 1995 " + _data; // + " GMT";
+				console.log(dateStr);
+				ticks = Date.parse(dateStr);
+				if (!isNaN(ticks)) return new Date(ticks);
+			}
+			var ticks = parseInt(_data);
+			if (!isNaN(ticks)) return new Date(ticks);
+			//'Thu, 01 Jan 1970 00:00:00 GMT'
+			return new Date(); // just return system date
+		}
+		
+		function toTimeString(ticks) {
+			return format(getCurrentHour()) + ":" + pad(format(getCurrentMin())) + ":" + pad(format(getCurrentSec()));
+			
+			function format(num) {
+				return Math.floor(num);
+			}
+			
+			function pad(num) {
+				return ((num + 100) + "").substr(1);
+			}
+		}
+		
+		function getCurrentHour() {
+			var hours = _curTime / 3600000; // 0-11.999
+			var hoursOffset = (_startDate.getHours() - _startDate.getUTCHours());
+			//console.log(hours + "-" + hoursOffset);
+			hours = (hours + hoursOffset + 24) % 12; // the +24 is to guarantee number is positive
+			return hours;
+		}
+		
+		function getCurrentMin() {
+			var mins = (_curTime % MILLSECS_HOUR) / 60000; // 0-59.999
+			return mins;
+		}
+		
+		function getCurrentSec() {
+			var secs = (_curTime % 60000) / 1000; // 0-59.999
+			return secs;
+		}
+		
+		
+		/* Misc */
+		
+		function checkNull(item, backupItem) {
+			return item != null ? item : backupItem;
+		}
+	
+		function toSnapStyleObject(styleObj) {
+			var snapObj = {};
+			for (var key in styleObj) {
+				var snapKey = STYLE_MAPPINGS[key];
+				if (snapKey !== undefined) {
+					snapObj[snapKey] = styleObj[key];
+				}
+			}
+			return snapObj;
+		}
+		
+		function toStyleString(styleObj) {
+			var styleStr = "";
+			for (var key in styleObj) {
+				var item = key + ":" + styleObj[key] + ";";
+				styleStr += item;
+			}
+			return styleStr;
+		}
+		
+		function setVisibility(snapEle, visible) {
+			var d = visible ? "block" : "none";
+			snapEle.attr({ display: d });
+		}
+		
+	  ]]>
+	</script>
+</svg>

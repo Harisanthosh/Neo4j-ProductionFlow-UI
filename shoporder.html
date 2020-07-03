@@ -20,6 +20,13 @@
 <script type="module" src="timingfield.js"></script>
 <!-- <script type="module" src="snap.svg-min.js"></script>
 <script type="module" src="svidget.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/momentjs/2.14.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<div class="topnav">
+  <a class="active" href="#home">Real Time Dashboard</a>
+  <a class="meterconfig" href="#meterconfig">GasMeter Configuration</a>
+  <a class="mining" href="#mining">Forecasting Dashboard</a>
+</div>
   <div class="wrapper" style="background-color: beige;">
     <div class="container">	
       <div class="row1">
@@ -47,12 +54,15 @@
 
               <div class="row">
               </div><!-- close row-->
+			  <input class="submit center-block btn btn-primary" value="Submit" type="submit"> <br/><br/>
               <div class="form-group text-center">
+				<button id="configSim" class="submit center-block btn btn-primary" type="button" >Configure Simulator</button>
 			    <button id="startSim" class="submit center-block btn btn-primary" type="button" >Start Simulator</button><!-- Disable button latere-->
-                <input class="submit center-block btn btn-primary" value="Submit" type="submit">
+                
 			    <button id="resetSim" class="submit center-block btn btn-primary" type="button" disabled>Reset Simulation</button> 
               </div>	
 			  <div id="dialog" title="Simulator Config">Monty2 Simulator Configuration Screen
+			  <img src="gearlogo.png" alt="Honeywell" style="width: 30%;/* height: auto; */margin-left: auto;margin-right: auto;text-align: center;vertical-align: middle;display: table-cell;">
 				<label for="cypher_query" class="sr-only">Enter the number of SFC's: </label>
                   <input name="cypher_query" id="sfcs_no" placeholder="Number of SFC's to simulate" type="text" value=""
                     required="required" data-error="Please enter no of SFC's">
@@ -83,16 +93,63 @@
 				<label for="cypher_query" class="sr-only">Enter the breakdown SFC % </label>
                   <input name="cypher_query" id="vari_choice" placeholder="Enter the breakdown SFC number" type="text" value=""
                     required="required" data-error="Enter the order of SFC">
-				<!-- <label for="nccases">Number of NonConformance SFC:</label>
+				<label for="nccases">Number of NonConformance SFC:</label>
 				<input type="number" id="nccases" name="nccases"
-					   min="1" max="1000"> -->
+					   min="1" max="1000">
+				<!-- <fieldset>
+					<legend>Use Custom Simulator </legend>
+					<label for="checkbox-3">Yes</label>
+					<input type="radio" name="checkbox-3" id="checkbox-3" value="Yes">
+					<label for="checkbox-4">No</label>
+					<input type="radio" name="checkbox-3" id="checkbox-4" value="No" checked>
+				 </fieldset> -->
 				
+			  </div>
+			  
+			  <div id="configSettingsSim" title="Update Simulator Config"> <!-- <h3>Update Settings for Monty2 Operations </h3><br /> <br /> -->
+			  <fieldset>
+					<legend>Update Waiting Time between operations</legend>
+					<label for="checkbox-5">Yes</label>
+					<input type="radio" name="checkbox-5" id="checkbox-5" value="Yes">
+					<label for="checkbox-6">No</label>
+					<input type="radio" name="checkbox-5" id="checkbox-6" value="No" checked>
+				 </fieldset>
+					<label for="stutzen">Enter time for Stutzen befetten (in secs)</label>
+				<input type="number" id="stutzen" name="stutzen"
+					   min="1" max="1000">
+					<label for="montieren">Enter time for Aussenmagnet montieren (in secs)</label>
+				<input type="number" id="montieren" name="montieren"
+					   min="1" max="1000">                  
+					<label for="einsetzen">Enter time for Messwerk einsetzen (in secs)</label>
+				<input type="number" id="einsetzen" name="einsetzen"
+					   min="1" max="1000">                  
+					<label for="dosieren">Enter time for Oberteil dosieren (in secs)</label>
+				<input type="number" id="dosieren" name="dosieren"
+					   min="1" max="1000">                  
+					<label for="aufsetzen">Enter time for Unterteil aufsetzen (in secs)</label>
+				<input type="number" id="aufsetzen" name="aufsetzen"
+					   min="1" max="1000">                  
+					<label for="auflegen">Enter time for Falz auflegen (in secs)</label>
+				<input type="number" id="auflegen" name="auflegen"
+					   min="1" max="1000">                  
+					<label for="vorbördeln">Enter time for Zähler vorbördeln (in secs)</label>
+				<input type="number" id="vorbördeln" name="vorbördeln"
+					   min="1" max="1000">                  
+					<label for="fertigbördeln">Enter time for Zähler fertigbördeln (in secs)</label>
+				<input type="number" id="fertigbördeln" name="fertigbördeln"
+					   min="1" max="1000">                  
+					<label for="dichtheitsprüfen">Enter time for Zähler dichtheitsprüfen (in secs)</label>
+				<input type="number" id="dichtheitsprüfen" name="dichtheitsprüfen"
+					   min="1" max="1000">                  
+					<label for="abstapeln">Enter time for Zähler abstapeln (in secs)</label>
+				<input type="number" id="abstapeln" name="abstapeln"
+					   min="1" max="1000">
 			  </div>
 			
         </div>
       </div>
       <div id="myLogFile">
-		<div style="text-align:center;padding:1em 0;float:left"> <h3><a style="text-decoration:none;" href="https://www.zeitverschiebung.net/en/country/de"><span style="color:gray;">Production Time in</span><br />Lotte Plant</a></h3> <iframe src="https://www.zeitverschiebung.net/clock-widget-iframe-v2?language=en&size=medium&timezone=Europe%2FBerlin" width="100%" height="115" frameborder="0" seamless></iframe> </div>
+		<div style="text-align:center;padding:1em 0;float:left"> <h3><a style="text-decoration:none;" href="https://www.zeitverschiebung.net/en/country/de"><span style="color:gray;">Production Time in</span><br />Lotte Plant</a></h3> <iframe src="https://www.zeitverschiebung.net/clock-widget-iframe-v2?language=en&size=medium&timezone=Europe%2FParis" width="100%" height="115" frameborder="0" seamless></iframe> </div>
 		<div class="panel panel-primary panel-colorful">
         		<div class="panel-body text-center">
         			<p class="text-uppercase mar-btm text-sm">Shipping Time for Monty2</p>
@@ -105,8 +162,9 @@
 		<div id="testResults" width="200" height="200" style="text-align: center;"></div>
 	
 	  </div>    
-	<div id="clockResults" width="200" height="200" style="width: 25%;margin-right: 30vw;margin-left: 30vw; margin-top: 5vw;"></div>	
+	<div id="clockResults" width="200" height="200" style="width: 25%;margin-right: 30vw;margin-left: 30vw; margin-top: 7vw;"></div>	
 <button id="showCSV" style="display: table;margin-left: 35vw;" class="submit center-block btn btn-primary" type="button" >Simulation Results</button>	
+<!-- <div id="celonisResults" style="text-align: center;"></div> -->
 	
   </div>
   </div>

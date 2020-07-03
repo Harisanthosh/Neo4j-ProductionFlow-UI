@@ -33,6 +33,21 @@ select {
         height: 50%;
         border: 1px solid lightgray;
         font: 10pt arial;
+		font-size: 1.6rem;
+}
+.row1 {
+    display: -ms-flexbox;
+    /* display: flex; */
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    width: 100%;
+    height: auto;
+    /* align-items: center; */
+}
+*, ::after, ::before {
+    box-sizing: border-box;
 }
 table {
     border-collapse: collapse;
@@ -79,3 +94,96 @@ td {
 .has-error input[type="text"], .has-error input[type="email"], .has-error select {
     border: 1px solid #a94442;
 }'' 
+.panel {
+  box-shadow: 0 2px 0 rgba(0,0,0,0.05);
+  border-radius: 0;
+  border: 0;
+  margin-bottom: 24px;
+}
+
+.panel-dark.panel-colorful {
+  background-color: #3b4146;
+  border-color: #3b4146;
+  color: #fff;
+}
+
+.panel-danger.panel-colorful {
+  background-color: #f76c51;
+  border-color: #f76c51;
+  color: #fff;
+}
+
+.panel-primary.panel-colorful {
+  background-color: #20B2AA;
+  border-color: #20B2AA;
+  color: #fff;
+}
+
+.panel-info.panel-colorful {
+  background-color: #4ebcda;
+  border-color: #4ebcda;
+  color: #fff;
+}
+
+.panel-body {
+  padding: 25px 20px;
+}
+
+.panel hr {
+  border-color: rgba(0,0,0,0.1);
+}
+
+.mar-btm {
+  margin-bottom: 15px;
+}
+
+h2, .h2 {
+  font-size: 28px;
+}
+
+.small, small {
+  font-size: 85%;
+}
+
+.text-sm {
+  font-size: .9em;
+}
+
+.text-thin {
+  font-weight: 300;
+}
+
+.text-semibold {
+  font-weight: 600;
+}
+
+.topnav {
+  background-color: indianred;
+  overflow: hidden;
+  text-align: right;
+}
+
+.topnav a {
+  float: right;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: goldenrod;
+  color: white;
+}
+
+.activetd {
+  background-color: goldenrod;
+  color: white;
+}

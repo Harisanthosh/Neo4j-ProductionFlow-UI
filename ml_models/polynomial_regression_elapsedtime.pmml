@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PMML version="4.2" xmlns="http://www.dmg.org/PMML-4_2">
+  <Header copyright="H395978">
+    <Application name="KNIME" version="4.1.1"/>
+  </Header>
+  <DataDictionary numberOfFields="18">
+    <DataField name="SFC" optype="categorical" dataType="string"/>
+    <DataField name="Unique count*(ITEM)" optype="continuous" dataType="integer">
+      <Interval closure="closedClosed" leftMargin="1.0" rightMargin="1.0"/>
+    </DataField>
+    <DataField name="Unique concatenate*(ITEM)" optype="categorical" dataType="string">
+      <Value value="80000988"/>
+      <Value value="80001002"/>
+      <Value value="80001004"/>
+      <Value value="80001005"/>
+    </DataField>
+    <DataField name="Last(DATE_TIME)" optype="categorical" dataType="string"/>
+    <DataField name="First(DATE_TIME)" optype="categorical" dataType="string"/>
+    <DataField name="Last(SFC_DONE)" optype="categorical" dataType="string">
+      <Value value="false"/>
+      <Value value="true"/>
+    </DataField>
+    <DataField name="Unique count(SHOP_ORDER_BO)" optype="continuous" dataType="integer">
+      <Interval closure="closedClosed" leftMargin="1.0" rightMargin="3.0"/>
+    </DataField>
+    <DataField name="Unique concatenate(SHOP_ORDER_BO)" optype="categorical" dataType="string">
+      <Value value="ShopOrderBO:0001,5238990"/>
+      <Value value="ShopOrderBO:0001,5235355"/>
+      <Value value="ShopOrderBO:0001,5240018"/>
+      <Value value="ShopOrderBO:0001,5239663"/>
+      <Value value="ShopOrderBO:0001,5238805"/>
+      <Value value="ShopOrderBO:0001,5238406"/>
+      <Value value="ShopOrderBO:0001,5235292"/>
+      <Value value="ShopOrderBO:0001,5227460"/>
+      <Value value="ShopOrderBO:0001,5237531"/>
+      <Value value="ShopOrderBO:0001,5237533"/>
+      <Value value="ShopOrderBO:0001,5237756"/>
+      <Value value="ShopOrderBO:0001,5232356"/>
+      <Value value="ShopOrderBO:0001,5239733"/>
+      <Value value="ShopOrderBO:0001,5240313"/>
+      <Value value="ShopOrderBO:0001,5234193"/>
+      <Value value="ShopOrderBO:0001,5231688"/>
+      <Value value="ShopOrderBO:0001,5235355, ShopOrderBO:0001,A21REWORK2001, ShopOrderBO:0001,5241553"/>
+      <Value value="ShopOrderBO:0001,5224108"/>
+      <Value value="ShopOrderBO:0001,5241553"/>
+      <Value value="ShopOrderBO:0001,5242001"/>
+      <Value value="ShopOrderBO:0001,5241999"/>
+      <Value value="ShopOrderBO:0001,5240729"/>
+      <Value value="ShopOrderBO:0001,5240727"/>
+      <Value value="ShopOrderBO:0001,5240731"/>
+      <Value value="ShopOrderBO:0001,A21REWORK2001, ShopOrderBO:0001,5241553, ShopOrderBO:0001,5224108"/>
+      <Value value="ShopOrderBO:0001,5241553, ShopOrderBO:0001,A21REWORK2001"/>
+      <Value value="ShopOrderBO:0001,5240313, ShopOrderBO:0001,A21REWORK2001, ShopOrderBO:0001,5241553"/>
+      <Value value="ShopOrderBO:0001,5235355, ShopOrderBO:0001,A21REWORK2001"/>
+    </DataField>
+    <DataField name="Mean(QTY)" optype="continuous" dataType="double">
+      <Interval closure="closedClosed" leftMargin="1.0" rightMargin="1.0"/>
+    </DataField>
+    <DataField name="Unique count*(RESRCE)" optype="continuous" dataType="integer">
+      <Interval closure="closedClosed" leftMargin="1.0" rightMargin="29.0"/>
+    </DataField>
+    <DataField name="Unique count(WORK_CENTER)" optype="continuous" dataType="integer">
+      <Interval closure="closedClosed" leftMargin="1.0" rightMargin="13.0"/>
+    </DataField>
+    <DataField name="Mean(QTY_DONE)" optype="continuous" dataType="double">
+      <Interval closure="closedClosed" leftMargin="0.0" rightMargin="0.058823529411764705"/>
+    </DataField>
+    <DataField name="Mean(QTY_ORDERED)" optype="continuous" dataType="double">
+      <Interval closure="closedClosed" leftMargin="2.0" rightMargin="2376.0000000000005"/>
+    </DataField>
+    <DataField name="Mean(QTY_RELEASED)" optype="continuous" dataType="double">
+      <Interval closure="closedClosed" leftMargin="2.0" rightMargin="2376.0000000000005"/>
+    </DataField>
+    <DataField name="Sum(PROCESSING_TIME_SECS)" optype="continuous" dataType="double">
+      <Interval closure="closedClosed" leftMargin="0.003" rightMargin="187705.939"/>
+    </DataField>
+    <DataField name="Sum(WAITING_TIME_SECS)" optype="continuous" dataType="double">
+      <Interval closure="closedClosed" leftMargin="0.0" rightMargin="2374205.9820000003"/>
+    </DataField>
+    <DataField name="Unique count(OPERATION)" optype="continuous" dataType="integer">
+      <Interval closure="closedClosed" leftMargin="1.0" rightMargin="36.0"/>
+    </DataField>
+    <DataField name="Unique concatenate(OPERATION)" optype="categorical" dataType="string"/>
+  </DataDictionary>
+  <RegressionModel functionName="regression" algorithmName="PolynomialRegression" modelName="KNIME Polynomial Regression" targetFieldName="Sum(PROCESSING_TIME_SECS)">
+    <MiningSchema>
+      <MiningField name="Unique count*(RESRCE)" invalidValueTreatment="asIs"/>
+      <MiningField name="Mean(QTY_ORDERED)" invalidValueTreatment="asIs"/>
+      <MiningField name="Unique count(OPERATION)" invalidValueTreatment="asIs"/>
+      <MiningField name="Sum(PROCESSING_TIME_SECS)" invalidValueTreatment="asIs" usageType="target"/>
+    </MiningSchema>
+    <RegressionTable intercept="109.35627878534183">
+      <NumericPredictor name="Unique count*(RESRCE)" coefficient="188.31474376834205"/>
+      <NumericPredictor name="Unique count*(RESRCE)" exponent="2" coefficient="-18.49829764800557"/>
+      <NumericPredictor name="Unique count*(RESRCE)" exponent="3" coefficient="0.4452670065024049"/>
+      <NumericPredictor name="Mean(QTY_ORDERED)" coefficient="-1.0983413914122098"/>
+      <NumericPredictor name="Mean(QTY_ORDERED)" exponent="2" coefficient="4.0330610156130904E-4"/>
+      <NumericPredictor name="Mean(QTY_ORDERED)" exponent="3" coefficient="3.572369595157366E-11"/>
+      <NumericPredictor name="Unique count(OPERATION)" coefficient="-27.962637139150416"/>
+      <NumericPredictor name="Unique count(OPERATION)" exponent="2" coefficient="3.883883777425145"/>
+      <NumericPredictor name="Unique count(OPERATION)" exponent="3" coefficient="-0.05992001624304441"/>
+    </RegressionTable>
+  </RegressionModel>
+</PMML>

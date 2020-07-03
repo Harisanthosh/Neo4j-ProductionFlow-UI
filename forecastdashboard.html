@@ -1,0 +1,211 @@
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" type="text/css" rel="stylesheet" media="screen" /> -->
+<link href="timingfield.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="node_modules/neovis.js/dist/neovis.js"></script>
+<script src="node_modules/svidget/dist/svidget.js"></script>
+<script type="module" src="shoporderforecast.js"></script>
+<script type="module" src="timingfield.js"></script>
+<!-- <script type="module" src="moment.min.js"></script>
+<script type="module" src="bootstrap.bundle.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/momentjs/2.14.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<div class="topnav">
+  <a class="forecasting" href="#home">Real Time Dashboard</a>
+  <a class="meterconfig" href="#meterconfig">GasMeter Configuration</a>
+  <a class="active" href="#mining">Forecasting Dashboard</a>
+</div>
+  <div class="wrapper" style="background-color: beige;">
+    <div class="container">	
+	<div class="row1">
+	  <img src="honeywelllogo.png" alt="Honeywell" style="width: 50%;/* height: auto; */margin-left: auto;margin-right: auto;text-align: center;vertical-align: middle;display: table-cell;">
+        <div class="col-xs-12 section5 text-center">
+          <h2 class="h1 font-w400">Gas Meter Forecasting</h2>
+          <p class="margin-top-m margin-bottom-m">Shift planner and order forecaster</p>
+        </div>
+      </div>
+	  
+	  <div class="row1" style="text-align: center;">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+          <form name="shiftForm" method="" role="form" data-toggle="validator" novalidate="true" id="shiftForm">
+              
+			<!-- <label for="meter_prod_id">Select the Gas Meter Item Id for production</label>
+				<select name="meter_prod_id" id="meter_prod_id">
+				  <option value="A011600">A011600 Stutzen befetten </option>
+				  <option value="A011800">A011800 Aussenmagnet montieren </option>
+				  <option value="A011900" selected="selected">A011900 Messwerk einsetzen </option>
+				  <option value="A012000">A012000 Oberteil dosieren </option>
+				  <option value="A012200">A012200 Unterteil aufsetzen </option>
+				</select><br/><br/> 
+				
+				<label for="meter_prod_id1">Select the Gas Meter Item Id for production</label>
+				<select name="meter_prod_id1" id="meter_prod_id1">
+					<option value="">select</option>
+				</select><br/><br/>-->
+				<table class="table" id="shiftTable">
+					<thead class="thead-dark">
+						<tr id="dayHeader">
+							<th id="dayHeader0">Sunday</th>
+							<th id="dayHeader1">Monday</th>
+							<th id="dayHeader2">Tuesday</th>
+							<th id="dayHeader3">Wednesday</th>
+							<th id="dayHeader4">Thursday</th>
+							<th id="dayHeader5">Friday</th>
+							<th id="dayHeader6">Saturday</th>
+						</tr>
+					</thead>
+				  <tr id="dateHeader">
+					<td id="dateHeader0">14-06-2020</td>
+					<td id="dateHeader1">15-06-2020</td>
+					<td id="dateHeader2">16-06-2020</td>
+					<td id="dateHeader3">17-06-2020</td>
+					<td id="dateHeader4">18-06-2020</td>
+					<td id="dateHeader5">19-06-2020</td>
+					<td id="dateHeader6">20-06-2020</td>
+				  </tr>
+				  <tr id="earlyShift">
+					<td id="earlyShift0">Early</td>
+					<td id="earlyShift1">Early</td>
+					<td id="earlyShift2">Early</td>
+					<td id="earlyShift3">Early</td>
+					<td id="earlyShift4">Early</td>
+					<td id="earlyShift5">Early</td>
+					<td id="earlyShift6">Early</td>
+				  </tr>
+				  <tr id="lateShift">
+					<td id="lateShift0">Late</td>
+					<td id="lateShift1">Late</td>
+					<td id="lateShift2">Late</td>
+					<td id="lateShift3">Late</td>
+					<td id="lateShift4">Late</td>
+					<td id="lateShift5">Late</td>
+					<td id="lateShift6">Late</td>
+				  </tr>
+				  <tr id="nightShift">
+					<td id="nightShift0">Night</td>
+					<td id="nightShift1">Night</td>
+					<td id="nightShift2">Night</td>
+					<td id="nightShift3">Night</td>
+					<td id="nightShift4">Night</td>
+					<td id="nightShift5">Night</td>
+					<td id="nightShift6">Night</td>
+				  </tr>
+				</table><br/><br/>
+
+              <div class="row">
+              </div>
+			  <input class="submit center-block btn btn-primary" value="Submit" type="submit"> </form> <br/><br/>			  
+			
+        </div>
+      </div> 
+	
+	<div id="durationShifts" width="200" height="200" style="text-align: center;"></div><br/>	
+	<button id="configForecast" style="display: table;margin-left: 32vw;" class="submit center-block btn btn-primary" type="button" >Configure Forecasting</button>	<br/><br/>
+	
+					<table id="outputTable" class="table">
+					<thead class="thead-dark">
+						<tr>
+							<th>Quantity</th>
+							<th>Item</th>
+							<th>Start</th>
+							<th>Estimated delivery time</th>
+							<th>Actual delivery close</th>
+							<th>Forecast</th>
+						</tr>
+					</thead>
+				  <tr id="rowItem1">
+					<td>800</td>
+					<td>800011481</td>
+					<td id="startDate">16/06/2020 05:45:00</td>
+					<td id="estimatedDate">16/06/2020 12:55:00</td>
+					<td> 
+					<form name="closeItem1" method="" id="closeItem1"><input type="submit" class="submit center-block btn btn-primary" value="Close"></form>
+					<a id="deleteItem1" href="" target="_blank" style="margin-left: 7vw;" onclick="return false;">Delete</a>
+						<!-- <div class='input-group date' id='datetimepicker1'>
+							<input type='text' class="form-control" />
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+						</div> -->
+					</td>
+					<td><form name="lineItem1" method="" id="lineItem1"><input type="submit" class="submit center-block btn btn-primary" value="Forecast"></form> </td>
+				  </tr>
+				  <tr id="rowItem2">
+					<td>420</td>
+					<td>800011482</td>
+					<td id="startDate1">16/06/2020 05:45:00</td>
+					<td id="estimatedDate1">16/06/2020 09:55:00</td>
+					<td> 
+						<form name="closeItem2" method="" id="closeItem2"><input type="submit" class="submit center-block btn btn-primary" value="Close"></form>
+						<a id="deleteItem2" href="" target="_blank" style="margin-left: 7vw;" onclick="return false;">Delete</a>
+					</td>
+					<td><form name="lineItem2" method="" id="lineItem2"><input type="submit" class="submit center-block btn btn-primary" value="Forecast"></form>  </td>
+				  </tr>
+				</table><br />
+				
+			<div id="dialog2" title="Simulator Config">Configure New Order
+			  <img src="gearlogo.png" alt="Honeywell" style="width: 30%;/* height: auto; */margin-left: auto;margin-right: auto;text-align: center;vertical-align: middle;display: table-cell;">
+				<label for="sfcs_no_qty" class="sr-only">Enter the number of SFC's: </label>
+                  <input name="sfcs_no_qty" id="sfcs_no_qty" placeholder="Number of SFC's to produce" type="text" value=""
+                    required="required" data-error="Please enter no of SFC's">
+				
+				<div id='select_item_order'>
+				<label for="meter_prod_id">Select an ItemId for Production</label>
+				<select name="meter_prod_id" id="meter_prod_id">
+					<option value="">select</option>
+				</select><br/><br/>
+				</div>
+				<label for="datetimepicker2">Select the Start date and time</label>
+				<div class='input-group date' id='datetimepicker2'>
+							<input type='text' id='datetimepickerval' class="form-control" />
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+				</div>
+				<!-- <label for="nccases">Number of NonConformance SFC:</label>
+				<input type="number" id="nccases" name="nccases"
+					   min="1" max="1000">-->
+				
+			  </div>
+			  
+			  <div id="dialog3" title="Simulator Config">Close Order
+			  <img src="gearlogo.png" alt="Honeywell" style="width: 30%;/* height: auto; */margin-left: auto;margin-right: auto;text-align: center;vertical-align: middle;display: table-cell;">
+				<table id="closeTable" style="width: 100%;">
+				<tr>
+					<th> Estimated Completion Time </th>
+					<th> Actual Completion Time</th>
+					<th> Error Rate </th>
+				</tr>
+				<tr> 
+					<td id="predDate">16/06/2020 05:45:00</td>
+					<td id="actDateClose">
+						<label for="datetimepicker3">Select the Start date and time</label>
+						<div class='input-group date' id='datetimepicker3'>
+									<input type='text' id='datetimepickerval3' class="form-control" />
+									<span class="input-group-addon">
+										<span class="glyphicon glyphicon-calendar"></span>
+									</span>
+						</div>
+					</td>
+					<td id="accuScore"> 92 % </td>
+				</tr>
+				</table>				
+			  </div>
+	
+	</div>
+	
+  </div>

@@ -8,6 +8,7 @@ from pm4py.objects.log.adapters.pandas import csv_import_adapter
 from pm4py.objects.conversion.log import factory as conversion_factory
 from pm4py.algo.discovery.alpha import factory as alpha_miner
 from pm4py.visualization.petrinet import factory as vis_factory
+import Monty2Simulator as mty2
 
 global cols_list
 global resource_list
@@ -62,6 +63,8 @@ def startSimulator(env,df2,tns):
 
 if __name__ == "__main__":
     # cols_list = []
+    mty2.api_invoker("no","5")
+    # Commented out currently
     df1 = pd.read_csv('sapme_sfcflow.csv',sep=';')
     #print(df1.head())
     global cols_list
