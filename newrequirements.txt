@@ -59,7 +59,7 @@ Flask-AppBuilder==2.3.4
 Flask-Babel==1.0.0
 Flask-Caching==1.3.3
 Flask-Compress==1.4.0
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 Flask-JWT-Extended==3.24.1
 Flask-Login==0.4.1
 Flask-OpenID==1.2.5

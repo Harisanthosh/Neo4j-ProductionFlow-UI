@@ -30,7 +30,7 @@ et-xmlfile==1.0.1
 fastapi==0.49.0
 Flask==1.1.1
 Flask-Compress==1.4.0
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 fsspec==0.6.3
 future==0.18.2
 graphviz==0.13.2
