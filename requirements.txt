@@ -88,7 +88,7 @@ prometheus-client==0.7.1
 prompt-toolkit==3.0.3
 psutil==5.7.0
 PuLP==2.0
-pydantic==1.4
+pydantic==1.6.2
 pydot==1.4.1
 pydotplus==2.0.2
 Pygments==2.5.2
