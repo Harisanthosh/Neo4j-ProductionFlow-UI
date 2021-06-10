@@ -27,7 +27,7 @@ defusedxml==0.6.0
 distributed==2.12.0
 entrypoints==0.3
 et-xmlfile==1.0.1
-fastapi==0.49.0
+fastapi==0.65.2
 Flask==1.1.1
 Flask-Compress==1.4.0
 Flask-Cors==3.0.8
