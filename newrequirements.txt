@@ -52,7 +52,7 @@ en-core-web-sm==2.2.5
 entrypoints==0.3
 ephem==3.7.7.1
 et-xmlfile==1.0.1
-fastapi==0.49.0
+fastapi==0.65.2
 Flask==1.1.1
 Flask-Admin==1.5.4
 Flask-AppBuilder==2.3.4
