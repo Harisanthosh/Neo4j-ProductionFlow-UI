@@ -234,7 +234,7 @@ uvicorn==0.11.3
 wasabi==0.6.0
 wcwidth==0.1.8
 webencodings==0.5.1
-websockets==8.1
+websockets==9.1
 Werkzeug==0.16.1
 wrapt==1.12.1
 WTForms==2.3.1
