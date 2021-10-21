@@ -3,7 +3,7 @@ agate-dbf==0.2.1
 agate-excel==0.2.3
 agate-sql==0.5.4
 attrs==19.3.0
-Babel==2.8.0
+Babel==2.9.1
 backcall==0.1.0
 bleach==3.1.1
 bokeh==2.0.0
