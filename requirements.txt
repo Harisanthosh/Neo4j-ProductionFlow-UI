@@ -57,7 +57,7 @@ jupyterlab-server==1.0.7
 kiwisolver==1.1.0
 leather==0.3.3
 locket==0.2.0
-lxml==4.5.0
+lxml==4.9.1
 MarkupSafe==1.1.1
 matplotlib==3.2.0
 mistune==0.8.4
