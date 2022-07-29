@@ -120,7 +120,7 @@ marshmallow==2.21.0
 marshmallow-enum==1.5.1
 marshmallow-sqlalchemy==0.23.1
 matplotlib==3.2.0
-mistune==0.8.4
+mistune==2.0.3
 mkl==2019.0
 msgpack==1.0.0
 murmurhash==1.0.2
